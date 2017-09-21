@@ -1,0 +1,14 @@
+hdiuser@cities-gpu:~/dev/gamv-cuda$ gfortran --version
+GNU Fortran (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609
+Copyright (C) 2015 Free Software Foundation, Inc.
+
+GNU Fortran comes with NO WARRANTY, to the extent permitted by law.
+You may redistribute copies of GNU Fortran
+under the terms of the GNU General Public License.
+For more information about these matters, see the file named COPYING
+
+hdiuser@cities-gpu:~/dev/gamv-cuda$ ldconfig -p | grep gomp
+	libgomp.so.1 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libgomp.so.1
+hdiuser@cities-gpu:~/dev/gamv-cuda$ echo |cpp -fopenmp -dM |grep -i open
+#define _OPENMP 201307
+hdiuser@cities-gpu:~/dev/gamv-cuda$ => OMP 4.0
