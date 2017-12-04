@@ -97,6 +97,8 @@ __device__ void computeVariogram(int i, int  j,const int nd, const int irepo, co
         // directions are considered (overlapping of direction tolerance cones
         // is allowed):
         //
+
+
             for(id=0;id<ndir;id++){
             //
             // Check for an acceptable azimuth angle:
@@ -150,6 +152,7 @@ __device__ void computeVariogram(int i, int  j,const int nd, const int irepo, co
                             //printf("dxy=%f dcazm=%f uvxazm[0]=%f uvyazm[0]=%f band=%f dcdec=%f omni=%d csdtol[0]=%f\n",dxy,dcazm,uvxazm[0],uvyazm[0],band,dcdec,omni,csdtol[0]);
 
                         //				fprintf(stdout,"dcazm=%f\tdcdec=%f\n",dcazm,dcdec);
+
                             for(iv=0;iv<nvarg;iv++){
                     //
                     // For this variogram, sort out which is the tail and the head value:
@@ -198,11 +201,13 @@ __device__ void computeVariogram(int i, int  j,const int nd, const int irepo, co
 
                                             if(omni){
                                                 if(vrtpr>=tmin && vrhpr>=tmin && vrtpr<tmax && vrhpr<tmax){
+
                                                     atomicAdd(&sh_np[ii + mxdlv*sh_pos],1.0);
                                                     atomicAdd(&sh_dis[ii + mxdlv*sh_pos],(h));
                                                     atomicAdd(&sh_tm[ii + mxdlv*sh_pos],(vrtpr));
                                                     atomicAdd(&sh_hm[ii + mxdlv*sh_pos],(vrhpr));
                                                     atomicAdd(&sh_gam[ii + mxdlv*sh_pos],((vrhpr-vrtpr)*(vrhpr-vrtpr)));
+
                                                 }
                                             }
                                         }
@@ -221,6 +226,13 @@ __device__ void computeVariogram(int i, int  j,const int nd, const int irepo, co
 
                                         }
                                     }
+				/*
+
+					Note: 
+					If new spatial measure are requiered, they must be implemented here following the 
+					previous examples, with it=1,2,5,9.
+
+				*/
                                 }
                             }
                         }
@@ -230,6 +242,10 @@ __device__ void computeVariogram(int i, int  j,const int nd, const int irepo, co
         }
     }
 }
+
+
+
+
 
 
 
@@ -310,6 +326,9 @@ __device__ void computePointsValues(int idx, int  idy,const int nd, const int ir
 
 
 }
+
+
+
 
 
 
@@ -397,6 +416,11 @@ __global__ void variogramKernelMemoryOptimized(const int nd, const int irepo, co
 }
 
 
+
+
+
+
+
 __global__ void variogramKernel(    const int nd, const int irepo, const int maxdat, const int MAXVAR,
                                     float *d_x, float *d_y, float *d_z,
                                     const float EPSLON,
@@ -471,6 +495,8 @@ __global__ void variogramKernel(    const int nd, const int irepo, const int max
         atomicAdd(&d_gam[threadId],sh_gam[threadId]);
     }
 }
+
+
 
 
 
@@ -733,6 +759,9 @@ extern "C" int extractstatisticscudawrapper_(
 	return 0;
 //end routine
 }
+
+
+
 
 
 
