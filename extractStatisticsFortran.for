@@ -5,12 +5,10 @@
      + uvxazm,uvyazm,uvzdec,uvhdec,csatol,csdtol,bandwh,bandwd,
      + atol,ivtype,ivtail,ivhead,vr)
 
-
 #ifdef _OPENMP
       use omp_lib
 #endif 
       implicit none
-
 
       integer nd,irepo,maxdat,MAXVAR
       real x(maxdat),y(maxdat),z(maxdat)
@@ -30,14 +28,12 @@
       integer ivtype(nvarg),ivtail(nvarg),ivhead(nvarg)
       real vr(maxdat,MAXVAR)
 
-
       integer threadId,i,j,id,ii,il,it,iv,jj
       real dx,dy,dz,dxs,dys,dzs,hs,h
       integer lagbeg,lagend,ilag
       real band,dcazm,dcdec,dxy,gamma,vrh,vrhpr,vrt,vrtpr
       logical omni
       
-
 c------------------init extractStatistics----------------------
 
 c$omp parallel default(firstprivate)
@@ -66,7 +62,6 @@ c
             if(hs.gt.dismxs) go to 4
             if(hs.lt.0.0) hs = 0.0
             h   = sqrt(hs)
-c            print *,'dx=',dx,' dy=',dy,' dz=',dz
 c
 c Determine which lag this is and skip if outside the defined distance
 c tolerance:
@@ -87,11 +82,6 @@ c
                   if(lagend.lt.0) go to 4
             endif
 
-
-c            print *,'dx=',dx,'dy=',dy,'dz=',dz,'h=',h,'lagbeg=',lagbeg,
-c     + 'lagend=',lagend
-
-
 c
 c Definition of the direction corresponding to the current pair. All
 c directions are considered (overlapping of direction tolerance cones
@@ -108,7 +98,6 @@ c
                         dcazm = (dx*uvxazm(id)+dy*uvyazm(id))/dxy
                   endif
                   if(abs(dcazm).lt.csatol(id)) go to 5
-
 
 c
 c Check the horizontal bandwidth criteria (maximum deviation 
@@ -134,7 +123,6 @@ c
                   band = uvhdec(id)*dz - uvzdec(id)*dxy
                   if(abs(band).gt.bandwd(id)) go to 5
 
-
 c
 c Check whether or not an omni-directional variogram is being computed:
 c
@@ -143,16 +131,6 @@ c
 c
 c This direction is acceptable - go ahead and compute all variograms:
 c
-
-
-c                  print *,'dxy=',dxy,'dcazm=',dcazm,'uvxazm(1)=',
-c     + uvxazm(1),'uvyazm(1)=',uvyazm(1),'band=',band,'dcdec=',dcdec,
-c     + 'omni=',omni,'csdtol(1)=',csdtol(1)
-
-
-
-c                  print *,'dcazm=',dcazm,' dcdec=',dcdec
-
                   do 6 iv=1,nvarg
 c
 c For this variogram, sort out which is the tail and the head value:
@@ -181,7 +159,6 @@ c
                                   vrhpr = vr(i,ii)
                             endif
                       endif
-c                      print *,'vrh=',vrh,'vrt=',vrt
 c
 c Reject this pair on the basis of missing values:
 c
@@ -361,12 +338,6 @@ c
  6              continue
  5          continue
  4    continue
-c 3    continue
-c      print *,'i=',i,'gam=',gam(:)
-
-c      print *,'threadId=',threadId,'/',numThreads,'i=',i,'np=',np(1:4)
-
-
 
       end do
 c$omp end do
@@ -402,12 +373,8 @@ c$omp end parallel
             tv(jj)  = tv(jj)  + reducedVariables(7,jj,ii)
          end do
       end do
-c      print *,'np(1)=',reducedVariables(3,:,1)
-c      print *,'np(2)=',reducedVariables(3,:,2)
 #endif
 
 c------------------end extractStatistics----------------------
-
-
       return
       end
