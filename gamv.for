@@ -54,8 +54,6 @@ c        d) the number of pairs for the lag
 c        e) the mean of the data contributing to the tail
 c        f) the mean of the data contributing to the head
 c
-c
-c
 c AUTHOR: Clayton V. Deutsch                             DATE: 1989-1999
 c-----------------------------------------------------------------------
 #ifdef _OPENMP
@@ -73,8 +71,7 @@ c geostat module
       integer,allocatable      :: ivtail(:),ivhead(:),ivtype(:)
       character*12,allocatable :: names(:)
 
-      real      EPSLON,VERSION
-      real      xlag,xltol,tmin,tmax
+      real      EPSLON,VERSION,xlag,xltol,tmin,tmax
       integer   nd,nlag,ndir,nvarg,isill,test
       character outfl*512
 
@@ -87,9 +84,7 @@ c readparam variables
       character datafl*512,str*512
       logical   testfl,testdat
       real,allocatable :: vrmin(:),vrmax(:)
-
       data      lin/1/,ncut/0/
-
 c check variables
 c      real      vrmin(*),vrmax(*)
       character title*80
@@ -109,10 +104,8 @@ c writeout variables
       character titlewr*132
       data      lout/1/
       integer*8 clock_start, clock_end, clock_rate
-      real etime 
+      real etime,init, fin, total  
       real elapsed(2)
-      real init, fin
-      real total
       integer i, j
 
 #ifdef _OPENMP
@@ -533,11 +526,6 @@ c
             end do
       end do
 c
-c Check on the variogams that were requested:
-c
-c      call check(vrmin,vrmax)
-
-c
 c Loop over all the variograms to be computed:
 c
       write(*,*)
@@ -618,7 +606,6 @@ c
 1001  print *,'Parameters ok.'
 
 c      call gamv
-
 c
 c Define the distance tolerance if it isn't already:
 c
@@ -783,9 +770,7 @@ c
                   gam(i) = 0.5 * gam(i)
             endif
  7    continue
-
 c      call writeout
-
 c
 c Loop over all the variograms that have been computed:
 c
