@@ -65,7 +65,6 @@ c-----------------------------------------------------------------------
       use extrae_module
 #endif
 
-
 c geostat module
       real,allocatable         :: x(:),y(:),z(:),vr(:,:),azm(:),atol(:),
      +                            bandwh(:),dip(:),dtol(:),bandwd(:)
@@ -78,7 +77,6 @@ c geostat module
       real      xlag,xltol,tmin,tmax
       integer   nd,nlag,ndir,nvarg,isill,test
       character outfl*512
-
 
 c readparam variables
       parameter(MV=500)
@@ -131,9 +129,6 @@ c      print *,numThreads
 c      use geostat
       EPSLON  = 1.0e-20
       VERSION = 3.000
-cc
-cc Read the Parameter File:
-cc
 c      call readparm
 
 
@@ -634,8 +629,6 @@ cc Call gamv to compute the required variograms:
 cc
 c      call gamv
 
-c     call system_clock(COUNT_RATE=clock_rate)
-
 c
 c Define the distance tolerance if it isn't already:
 c
@@ -687,8 +680,6 @@ c
 c MAIN LOOP OVER ALL PAIRS:
 c
       irepo = max(1,min((nd/10),1000))
-
-
 c     call system_clock(COUNT=clock_start)
       init = etime(elapsed)
 #ifdef ANSIC
@@ -718,7 +709,6 @@ c     call system_clock(COUNT=clock_start)
 #endif
 #endif
       fin = etime(elapsed)
-
       total = fin - init
       print *, 'extract statistics total ', total
       print *, 'total ', fin
@@ -862,8 +852,6 @@ c
 c Finished:
 c
       close(lout)
-
-
 cc
 cc Finished:
 cc
@@ -878,9 +866,6 @@ c-----------------------------------------------------------------------
 c
 c                      Write a Parameter File
 c                      **********************
-c
-c
-c
 c-----------------------------------------------------------------------
       lun = 99
       open(lun,file='gamv.par',status='UNKNOWN')
