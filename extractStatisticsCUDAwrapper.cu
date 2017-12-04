@@ -1,15 +1,23 @@
+/*
+Add description and legal texts
+*/
+
+
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
 
+
 #define DT float
 #define MAX(x,y)  ((x) >= (y) ? (x) : (y))
 #define MIN(x,y)  ((x) < (y) ? (x) : (y))
-#define MEM_OPTIMIZED 0
-#define THREADSX 32
+#define MEM_OPTIMIZED 1
+#define THREADSX 16
 #define THREADSY THREADSX
+
+
 
 void Check_CUDA_Error(const char *message)
 {
@@ -335,6 +343,7 @@ __global__ void variogramKernelMemoryOptimized(const int nd, const int irepo, co
     float *sh_hm = &buffer[3*chunks_sh_mem*mxdlv];
     float *sh_tm = &buffer[4*chunks_sh_mem*mxdlv];
     int init_sh_mem = threadId;
+
     while (init_sh_mem < chunks_sh_mem*mxdlv){
         sh_np[init_sh_mem] = 0;
         sh_dis[init_sh_mem] = 0.0;
@@ -456,6 +465,8 @@ __global__ void variogramKernel(    const int nd, const int irepo, const int max
     }
 }
 
+
+
 extern "C" int extractstatisticscudawrapper_(
                             //      integer nd,irepo,maxdat,MAXVAR
                                 int *nd, int *irepo, int *maxdat, int *MAXVAR,
@@ -496,121 +507,121 @@ extern "C" int extractstatisticscudawrapper_(
 	DT *h_np,*h_dis,*h_gam,*h_hm,*h_tm;
 	float *d_uvxazm,*d_uvyazm,*d_uvzdec,*d_uvhdec,*d_csatol,*d_csdtol,*d_bandwh,*d_bandwd,*d_atol,*d_vr;
 	int *d_ivtype,*d_ivtail,*d_ivhead;
-    cudaSetDevice(0);
-    dim3 threads(THREADSX,THREADSY,1);
+    	cudaSetDevice(0);
+    	dim3 threads(THREADSX,THREADSY,1);
 	int frac_nd;
 
-    int chunk_sh_mem = 4;
+    	int chunk_sh_mem = 4;
 	h_np = (DT*)malloc(sizeof(DT)* *mxdlv);
 	h_dis = (DT*)malloc(sizeof(DT)* *mxdlv);
 	h_gam = (DT*)malloc(sizeof(DT)* *mxdlv);
 	h_hm = (DT*)malloc(sizeof(DT)* *mxdlv);
 	h_tm = (DT*)malloc(sizeof(DT)* *mxdlv);
 	int shared_mem_size;
-    int i;
-    for (i = 0; i < *mxdlv; i++){
-        h_np[i] = 0.0;
-        h_dis[i] = 0.0;
-        h_gam[i] = 0.0;
-        h_hm[i] = 0.0;
-        h_tm[i] = 0.0;
-    }
-    cudaMalloc( (void **)&d_x, sizeof(float) * (*maxdat) );
-    //Check_CUDA_Error("malloc coord");
-    cudaMalloc( (void **)&d_y, sizeof(float) * (*maxdat) );
-    //Check_CUDA_Error("malloc coord");
-    cudaMalloc( (void **)&d_z, sizeof(float) * (*maxdat) );
-    //Check_CUDA_Error("malloc coord");
-    cudaMalloc( (void **)&d_np, sizeof(DT) * (*mxdlv) );
-    //Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-    cudaMalloc( (void **)&d_dis, sizeof(DT) * (*mxdlv) );
-    //Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-    cudaMalloc( (void **)&d_gam, sizeof(DT) * (*mxdlv) );
-    //Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-    cudaMalloc( (void **)&d_hm, sizeof(DT) * (*mxdlv) );
-    //Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-    cudaMalloc( (void **)&d_tm, sizeof(DT) * (*mxdlv) );
-    //Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-    cudaMalloc( (void **)&d_uvxazm, sizeof(float) * (100) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_uvyazm, sizeof(float) * (100) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_uvzdec, sizeof(float) * (100) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_uvhdec, sizeof(float) * (100) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_csatol, sizeof(float) * (100) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_csdtol, sizeof(float) * (100) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_bandwh, sizeof(float) * (*ndir) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_bandwd, sizeof(float) * (*ndir) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_atol, sizeof(float) * (*ndir) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_vr, sizeof(float) * (*maxdat* *MAXVAR) );
-    //Check_CUDA_Error("small mallocs ");
-    cudaMalloc( (void **)&d_ivtype, sizeof(float) * (*nvarg) );
-    //Check_CUDA_Error("iv mallocs");
-    cudaMalloc( (void **)&d_ivtail, sizeof(float) * (*nvarg) );
-    //Check_CUDA_Error("iv mallocs");
-    cudaMalloc( (void **)&d_ivhead, sizeof(float) * (*nvarg) );
-    //Check_CUDA_Error("iv mallocs");
-    cudaMemcpy( d_x, x,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy coords h -> d");
-    cudaMemcpy( d_y, y,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy coords h -> d");
-    cudaMemcpy( d_z, z,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy coords h -> d");
-    cudaMemcpy( d_np, h_np,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-    cudaMemcpy( d_dis, h_dis,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-    cudaMemcpy( d_gam, h_gam,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-    cudaMemcpy( d_hm, h_hm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-    cudaMemcpy( d_tm, h_tm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-    cudaMemcpy( d_uvxazm, uvxazm,sizeof(float) * (100), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_uvyazm, uvyazm,sizeof(float) * (100), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_uvzdec, uvzdec,sizeof(float) * (100), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_uvhdec, uvhdec,sizeof(float) * (100), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_csatol, csatol,sizeof(float) * (100), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_csdtol, csdtol,sizeof(float) * (100), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_bandwh, bandwh,sizeof(float) * (*ndir), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_bandwd, bandwd,sizeof(float) * (*ndir), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_atol, atol,sizeof(float) * (*ndir), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_vr, vr,sizeof(float) * (*maxdat* *MAXVAR), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy small data h -> d");
-    cudaMemcpy( d_ivtype, ivtype,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy iv var h -> d");
-    cudaMemcpy( d_ivtail, ivtail,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy iv var h -> d");
-    cudaMemcpy( d_ivhead, ivhead,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice );
-    //Check_CUDA_Error("cpy iv var h -> d");
-    cudaEvent_t start, stop;
-    float time;
+    	int i;
+    	for (i = 0; i < *mxdlv; i++){
+        	h_np[i] = 0.0;
+        	h_dis[i] = 0.0;
+        	h_gam[i] = 0.0;
+        	h_hm[i] = 0.0;
+        	h_tm[i] = 0.0;
+    	}
+   	cudaMalloc( (void **)&d_x, sizeof(float) * (*maxdat) );
+   	//Check_CUDA_Error("malloc coord");
+   	cudaMalloc( (void **)&d_y, sizeof(float) * (*maxdat) );
+   	//Check_CUDA_Error("malloc coord");
+   	cudaMalloc( (void **)&d_z, sizeof(float) * (*maxdat) );
+   	//Check_CUDA_Error("malloc coord");
+   	cudaMalloc( (void **)&d_np, sizeof(DT) * (*mxdlv) );
+   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+   	cudaMalloc( (void **)&d_dis, sizeof(DT) * (*mxdlv) );
+   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+   	cudaMalloc( (void **)&d_gam, sizeof(DT) * (*mxdlv) );
+   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+   	cudaMalloc( (void **)&d_hm, sizeof(DT) * (*mxdlv) );
+   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+   	cudaMalloc( (void **)&d_tm, sizeof(DT) * (*mxdlv) );
+   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+   	cudaMalloc( (void **)&d_uvxazm, sizeof(float) * (100) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_uvyazm, sizeof(float) * (100) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_uvzdec, sizeof(float) * (100) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_uvhdec, sizeof(float) * (100) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_csatol, sizeof(float) * (100) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_csdtol, sizeof(float) * (100) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_bandwh, sizeof(float) * (*ndir) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_bandwd, sizeof(float) * (*ndir) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_atol, sizeof(float) * (*ndir) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_vr, sizeof(float) * (*maxdat* *MAXVAR) );
+   	//Check_CUDA_Error("small mallocs ");
+   	cudaMalloc( (void **)&d_ivtype, sizeof(float) * (*nvarg) );
+   	//Check_CUDA_Error("iv mallocs");
+   	cudaMalloc( (void **)&d_ivtail, sizeof(float) * (*nvarg) );
+   	//Check_CUDA_Error("iv mallocs");
+   	cudaMalloc( (void **)&d_ivhead, sizeof(float) * (*nvarg) );
+   	//Check_CUDA_Error("iv mallocs");
+   	cudaMemcpy( d_x, x,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy coords h -> d");
+   	cudaMemcpy( d_y, y,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy coords h -> d");
+   	cudaMemcpy( d_z, z,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy coords h -> d");
+   	cudaMemcpy( d_np, h_np,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+   	cudaMemcpy( d_dis, h_dis,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+   	cudaMemcpy( d_gam, h_gam,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+   	cudaMemcpy( d_hm, h_hm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+   	cudaMemcpy( d_tm, h_tm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+   	cudaMemcpy( d_uvxazm, uvxazm,sizeof(float) * (100), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_uvyazm, uvyazm,sizeof(float) * (100), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_uvzdec, uvzdec,sizeof(float) * (100), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_uvhdec, uvhdec,sizeof(float) * (100), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_csatol, csatol,sizeof(float) * (100), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_csdtol, csdtol,sizeof(float) * (100), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_bandwh, bandwh,sizeof(float) * (*ndir), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_bandwd, bandwd,sizeof(float) * (*ndir), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_atol, atol,sizeof(float) * (*ndir), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_vr, vr,sizeof(float) * (*maxdat* *MAXVAR), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy small data h -> d");
+   	cudaMemcpy( d_ivtype, ivtype,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy iv var h -> d");
+   	cudaMemcpy( d_ivtail, ivtail,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy iv var h -> d");
+   	cudaMemcpy( d_ivhead, ivhead,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice );
+   	//Check_CUDA_Error("cpy iv var h -> d");
+   	cudaEvent_t start, stop;
+   	float time;
 
-    if (MEM_OPTIMIZED){
-        printf("---------\nmaxdat %d nd %d\n---------\n",*maxdat,*nd);
-        frac_nd = *maxdat/THREADSX;
-        dim3 blocks( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
-        shared_mem_size = sizeof(DT)*(*mxdlv*5*chunk_sh_mem);
-        cudaEventCreate(&start);
-        cudaEventCreate(&stop);
-        cudaEventRecord(start, 0);
-        variogramKernelMemoryOptimized<<< blocks, threads,shared_mem_size >>>(*nd,*irepo,*maxdat,*MAXVAR,
+    	if (MEM_OPTIMIZED){
+        	printf("---------\nmaxdat %d nd %d\n---------\n",*maxdat,*nd);
+        	frac_nd = *maxdat/THREADSX;
+        	dim3 blocks( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
+        	shared_mem_size = sizeof(DT)*(*mxdlv*5*chunk_sh_mem);
+        	cudaEventCreate(&start);
+        	cudaEventCreate(&stop);
+        	cudaEventRecord(start, 0);
+        	variogramKernelMemoryOptimized<<< blocks, threads,shared_mem_size >>>(*nd,*irepo,*maxdat,*MAXVAR,
                                             d_x,d_y,d_z,
                                             *EPSLON,
                                             *nlag,
@@ -624,22 +635,22 @@ extern "C" int extractstatisticscudawrapper_(
                                             d_atol,
                                             d_ivtype,d_ivtail,d_ivhead,
                                             d_vr,chunk_sh_mem,frac_nd);
-        cudaDeviceSynchronize();
-        Check_CUDA_Error("fitness kernel");
-        cudaEventRecord(stop, 0);
-        cudaEventSynchronize(stop);
-        cudaEventElapsedTime(&time, start, stop);
+        	cudaDeviceSynchronize();
+        	Check_CUDA_Error("fitness kernel");
+        	cudaEventRecord(stop, 0);
+        	cudaEventSynchronize(stop);
+        	cudaEventElapsedTime(&time, start, stop);
                 printf ("Time for the Optimized kernel: %f ms\n", time);
-        printf ("GPU time: %f\n", time/1000);
-        printf("------------------------------\n");
-    }else{
-        frac_nd = *maxdat/THREADSX;
-        dim3 blocks( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
-        shared_mem_size = sizeof(DT)*(*mxdlv*5);
-        cudaEventCreate(&start);
-        cudaEventCreate(&stop);
-        cudaEventRecord(start, 0);
-        variogramKernel<<< blocks, threads,shared_mem_size >>>(*nd,*irepo,*maxdat,*MAXVAR,
+        	printf ("GPU time: %f\n", time/1000);
+        	printf("------------------------------\n");
+    	}else{
+        	frac_nd = *maxdat/THREADSX;
+        	dim3 blocks( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
+        	shared_mem_size = sizeof(DT)*(*mxdlv*5);
+        	cudaEventCreate(&start);
+        	cudaEventCreate(&stop);
+        	cudaEventRecord(start, 0);
+        	variogramKernel<<< blocks, threads,shared_mem_size >>>(*nd,*irepo,*maxdat,*MAXVAR,
                                             d_x,d_y,d_z,
                                             *EPSLON,
                                             *nlag,
@@ -653,66 +664,84 @@ extern "C" int extractstatisticscudawrapper_(
                                             d_atol,
                                             d_ivtype,d_ivtail,d_ivhead,
                                             d_vr,frac_nd);
-        cudaDeviceSynchronize();
-        Check_CUDA_Error("fitness kernel");
-        cudaEventRecord(stop, 0);
-        cudaEventSynchronize(stop);
-        cudaEventElapsedTime(&time, start, stop);
+        	cudaDeviceSynchronize();
+        	Check_CUDA_Error("fitness kernel");
+        	cudaEventRecord(stop, 0);
+        	cudaEventSynchronize(stop);
+        	cudaEventElapsedTime(&time, start, stop);
                 printf ("Time for variogram kernel: %f ms\n", time);
-        printf ("GPU time: %f\n", time/1000);
-        printf("------------------------------\n");
-    }
+        	printf ("GPU time: %f\n", time/1000);
+        	printf("------------------------------\n");
+    	}
 
-    cudaMemcpy( h_np, d_np,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
-    //Check_CUDA_Error("cpy d -> h");
-    cudaMemcpy( h_dis, d_dis,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
-    //Check_CUDA_Error("cpy d -> h");
-    cudaMemcpy( h_gam, d_gam,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
-    //Check_CUDA_Error("cpy d -> h");
-    cudaMemcpy( h_hm, d_hm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
-    //Check_CUDA_Error("cpy d -> h");
-    cudaMemcpy( h_tm, d_tm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
-    //Check_CUDA_Error("cpy d -> h");
+    	cudaMemcpy( h_np, d_np,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
+    	//Check_CUDA_Error("cpy d -> h");
+    	cudaMemcpy( h_dis, d_dis,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
+    	//Check_CUDA_Error("cpy d -> h");
+    	cudaMemcpy( h_gam, d_gam,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
+    	//Check_CUDA_Error("cpy d -> h");
+    	cudaMemcpy( h_hm, d_hm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
+    	//Check_CUDA_Error("cpy d -> h");
+    	cudaMemcpy( h_tm, d_tm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost);
+    	//Check_CUDA_Error("cpy d -> h");
 
-   // printf("np, dis, gam, hm, tm\n");
-//    float sum_np = 0.0;
-    for (i = 0; i < *mxdlv; i++){
-        np[i] = (double)h_np[i];
-        dis[i] = (double)h_dis[i];
-        gam[i] = (double)h_gam[i];
-        hm[i] = (double)h_hm[i];
-        tm[i] = (double)h_tm[i];
-      //  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
-    }
+   	// printf("np, dis, gam, hm, tm\n");
+	//    float sum_np = 0.0;
+    	for (i = 0; i < *mxdlv; i++){
+        	np[i] = (double)h_np[i];
+        	dis[i] = (double)h_dis[i];
+        	gam[i] = (double)h_gam[i];
+        	hm[i] = (double)h_hm[i];
+        	tm[i] = (double)h_tm[i];
+      	//  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
+    	}
 
 
-    cudaFree(d_x);
-    cudaFree(d_y);
-    cudaFree(d_z);
-    cudaFree(d_np);
-    cudaFree(d_dis);
-    cudaFree(d_gam);
-    cudaFree(d_hm);
-    cudaFree(d_tm);
-    cudaFree(d_uvxazm);
-    cudaFree(d_uvyazm);
-    cudaFree(d_uvzdec);
-    cudaFree(d_uvhdec);
-    cudaFree(d_csatol);
-    cudaFree(d_csdtol);
-    cudaFree(d_bandwh);
-    cudaFree(d_bandwd);
-    cudaFree(d_atol);
-    cudaFree(d_vr);
-    cudaFree(d_ivtype);
-    cudaFree(d_ivtail);
-    cudaFree(d_ivhead);
-    free(h_np);
-    free(h_dis);
-    free(h_gam);
-    free(h_hm);
-    free(h_tm);
+    	cudaFree(d_x);
+    	cudaFree(d_y);
+    	cudaFree(d_z);
+    	cudaFree(d_np);
+    	cudaFree(d_dis);
+    	cudaFree(d_gam);
+    	cudaFree(d_hm);
+    	cudaFree(d_tm);
+    	cudaFree(d_uvxazm);
+    	cudaFree(d_uvyazm);
+    	cudaFree(d_uvzdec);
+    	cudaFree(d_uvhdec);
+    	cudaFree(d_csatol);
+    	cudaFree(d_csdtol);
+    	cudaFree(d_bandwh);
+    	cudaFree(d_bandwd);
+    	cudaFree(d_atol);
+    	cudaFree(d_vr);
+    	cudaFree(d_ivtype);
+    	cudaFree(d_ivtail);
+    	cudaFree(d_ivhead);
+    	free(h_np);
+    	free(h_dis);
+    	free(h_gam);
+    	free(h_hm);
+    	free(h_tm);
 	return 0;
 //end routine
 }
+
+
+/*
+
+TODO:
+
+- Add documentation in each routine
+- Add diagrams (UML?) of the sequence and interactions between the CPU and GPU
+- Document the memory optimization proposed.
+
+*/
+
+
+
+
+
+
+
 
