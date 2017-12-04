@@ -1,3 +1,4 @@
+
 /*
 Add description and legal texts
 */
@@ -230,6 +231,8 @@ __device__ void computeVariogram(int i, int  j,const int nd, const int irepo, co
     }
 }
 
+
+
 __device__ void computePointsValues(int idx, int  idy,const int nd, const int irepo, const int maxdat, const int MAXVAR,
                                     float *d_x, float *d_y, float *d_z,
                                     const float EPSLON,
@@ -307,6 +310,8 @@ __device__ void computePointsValues(int idx, int  idy,const int nd, const int ir
 
 
 }
+
+
 
 __global__ void variogramKernelMemoryOptimized(const int nd, const int irepo, const int maxdat, const int MAXVAR,
                                     float *d_x, float *d_y, float *d_z,
@@ -390,6 +395,8 @@ __global__ void variogramKernelMemoryOptimized(const int nd, const int irepo, co
     }
 
 }
+
+
 __global__ void variogramKernel(    const int nd, const int irepo, const int maxdat, const int MAXVAR,
                                     float *d_x, float *d_y, float *d_z,
                                     const float EPSLON,
@@ -726,6 +733,8 @@ extern "C" int extractstatisticscudawrapper_(
 	return 0;
 //end routine
 }
+
+
 
 
 /*

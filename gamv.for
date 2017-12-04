@@ -122,16 +122,10 @@ c$omp end parallel
 #else
       numThreads = 1
 #endif
-
-c      print *,numThreads
-
-
 c      use geostat
       EPSLON  = 1.0e-20
       VERSION = 3.000
 c      call readparm
-
-
 c
 c Note VERSION number:
 c
@@ -614,7 +608,6 @@ c END Loop over all variograms:
 c
       end do
 
-
       goto 1001
 c
 c Error in an Input File Somewhere:
@@ -624,9 +617,6 @@ c
 
 1001  print *,'Parameters ok.'
 
-cc
-cc Call gamv to compute the required variograms:
-cc
 c      call gamv
 
 c
@@ -794,9 +784,6 @@ c
             endif
  7    continue
 
-cc
-cc Write Results:
-cc
 c      call writeout
 
 c
@@ -852,10 +839,6 @@ c
 c Finished:
 c
       close(lout)
-cc
-cc Finished:
-cc
-
       write(*,9998) VERSION
  9998 format(/' GAMV Version: ',f5.3, ' Finished'/)
       stop
