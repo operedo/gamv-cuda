@@ -41,7 +41,7 @@ F_OBJECTS= extractStatisticsFortran.o
 C_OBJECTS= extractStatisticsCwrapper.o 
 CU_OBJECTS= extractStatisticsCUDAwrapper.o  
 
-GSLIB=../../gslib/gslib.a 
+GSLIB=../gslib-alges/gslib/gslib.a 
 
 all: seq-for seq-c cuda
 
@@ -72,7 +72,8 @@ cuda: gslib
 	$(FC) -DCUDA $(FFLAGS) $(INCS) $(NVINCS) gamv.o $(CU_OBJECTS) -o gamvCUDA.exe $(GSLIB) $(NVLIBS) $(LIBS) 
 
 gslib:
-	cd ../sisim-gpu/gslibalges/gslib; make clean; make gslib.a COMPILER="$(FC)" FLAGS="$(FFLAGS)" OMP=" "; cd -
+	cd ../gslib-alges/gslib; make clean; make gslib.a COMPILER="$(FC)" FLAGS="$(FFLAGS)" OMP=" "; cd -
+
 #	cd ../gslib90/gslib; make clean; make gslib.a COMPILER="$(FC)" FLAGS="$(FFLAGS)" OMP=" "; cd ../../pargamv
 #	cd ../gslib90/gslib; make clean; make gslib.a COMPILER="$(FC)" FLAGS="$(FFLAGS)" OMP="$(OPENMP)"; cd ../../pargamv
 
