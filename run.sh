@@ -2,10 +2,11 @@
 for example in sgsim_800x800x160 sisim_420x600x400 
 #for example in sisim_420x600x400 
 do
-	for size in 15625 31250 62500 125000 250000 500000 
+	for size in 15625 31250 62500 125000 250000 500000 1000000 2000000 4000000 8000000 
 	#for size in 1000000 2000000 4000000 8000000 
 	do
-		/usr/bin/time ./gamvCUDA.exe gamv-${example}_${size}.par > salida_${example}_${size}_cuda.txt 2>&1
+		#echo "/usr/bin/time ./gamvCUDA.exe gamv-${example}_${size}.par > salida_${example}_${size}_cuda.txt 2>&1"
+		/usr/bin/time ./gamvCUDA.exe gamv-${example}_${size}.par > salida_${example}_${size}_cuda_nodiag.txt 2>&1
 #		mv gamv.out gamv.out_${example}_${size}_cuda
 	done
 done

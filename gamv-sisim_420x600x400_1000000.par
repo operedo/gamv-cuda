@@ -3,7 +3,7 @@ sisim.out_420x600x400_1000000_header                      -file with data
 1   2   3                         -   columns for X, Y, Z coordinates
 1   4                             -   number of variables,col numbers
 -1.0e21     1.0e21                   -   trimming limits
-gamv.out              -file for variogram output
+gamv.out_sisim_420x600x400_1000000_cuda              -file for variogram output
 20                                -number of lags
 5.0                              -lag separation distance
 1.0                               -lag tolerance

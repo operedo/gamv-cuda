@@ -14,7 +14,7 @@ Add description and legal texts
 #define DT double
 #define MAX(x,y)  ((x) >= (y) ? (x) : (y))
 #define MIN(x,y)  ((x) < (y) ? (x) : (y))
-#define MEM_OPTIMIZED 1
+#define MEM_OPTIMIZED 0
 #define THREADSX 32
 #define THREADSY THREADSX
 
