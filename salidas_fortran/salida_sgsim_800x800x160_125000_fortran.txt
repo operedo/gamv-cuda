@@ -1,0 +1,159 @@
+
+ GAMV Version: 3.000
+
+  data file = sgsim.out_800x800x160_125000_header     
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out_sgsim_800x800x160_125000_fortra
+  number of lags =           40
+  lag distance =    20.0000000    
+  lag tolerance =    5.00000000    
+  number of directions =            1
+  azm, atol, bandwh =    0.00000000       90.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       90.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            1
+  tail,head,type =            1           1           1
+
+ maxdat =       125000
+ Variable number            1
+   Number   =       125000
+   Average  =   0.934305489    
+   Variance =   0.928507388    
+
+ Variogram  1 Semivariogram          :  tail=Var          head=Var            
+ Parameters ok.
+   currently on      1000 of    125000
+   currently on      2000 of    125000
+   currently on      3000 of    125000
+   currently on      4000 of    125000
+   currently on      5000 of    125000
+   currently on      6000 of    125000
+   currently on      7000 of    125000
+   currently on      8000 of    125000
+   currently on      9000 of    125000
+   currently on     10000 of    125000
+   currently on     11000 of    125000
+   currently on     12000 of    125000
+   currently on     13000 of    125000
+   currently on     14000 of    125000
+   currently on     15000 of    125000
+   currently on     16000 of    125000
+   currently on     17000 of    125000
+   currently on     18000 of    125000
+   currently on     19000 of    125000
+   currently on     20000 of    125000
+   currently on     21000 of    125000
+   currently on     22000 of    125000
+   currently on     23000 of    125000
+   currently on     24000 of    125000
+   currently on     25000 of    125000
+   currently on     26000 of    125000
+   currently on     27000 of    125000
+   currently on     28000 of    125000
+   currently on     29000 of    125000
+   currently on     30000 of    125000
+   currently on     31000 of    125000
+   currently on     32000 of    125000
+   currently on     33000 of    125000
+   currently on     34000 of    125000
+   currently on     35000 of    125000
+   currently on     36000 of    125000
+   currently on     37000 of    125000
+   currently on     38000 of    125000
+   currently on     39000 of    125000
+   currently on     40000 of    125000
+   currently on     41000 of    125000
+   currently on     42000 of    125000
+   currently on     43000 of    125000
+   currently on     44000 of    125000
+   currently on     45000 of    125000
+   currently on     46000 of    125000
+   currently on     47000 of    125000
+   currently on     48000 of    125000
+   currently on     49000 of    125000
+   currently on     50000 of    125000
+   currently on     51000 of    125000
+   currently on     52000 of    125000
+   currently on     53000 of    125000
+   currently on     54000 of    125000
+   currently on     55000 of    125000
+   currently on     56000 of    125000
+   currently on     57000 of    125000
+   currently on     58000 of    125000
+   currently on     59000 of    125000
+   currently on     60000 of    125000
+   currently on     61000 of    125000
+   currently on     62000 of    125000
+   currently on     63000 of    125000
+   currently on     64000 of    125000
+   currently on     65000 of    125000
+   currently on     66000 of    125000
+   currently on     67000 of    125000
+   currently on     68000 of    125000
+   currently on     69000 of    125000
+   currently on     70000 of    125000
+   currently on     71000 of    125000
+   currently on     72000 of    125000
+   currently on     73000 of    125000
+   currently on     74000 of    125000
+   currently on     75000 of    125000
+   currently on     76000 of    125000
+   currently on     77000 of    125000
+   currently on     78000 of    125000
+   currently on     79000 of    125000
+   currently on     80000 of    125000
+   currently on     81000 of    125000
+   currently on     82000 of    125000
+   currently on     83000 of    125000
+   currently on     84000 of    125000
+   currently on     85000 of    125000
+   currently on     86000 of    125000
+   currently on     87000 of    125000
+   currently on     88000 of    125000
+   currently on     89000 of    125000
+   currently on     90000 of    125000
+   currently on     91000 of    125000
+   currently on     92000 of    125000
+   currently on     93000 of    125000
+   currently on     94000 of    125000
+   currently on     95000 of    125000
+   currently on     96000 of    125000
+   currently on     97000 of    125000
+   currently on     98000 of    125000
+   currently on     99000 of    125000
+   currently on    100000 of    125000
+   currently on    101000 of    125000
+   currently on    102000 of    125000
+   currently on    103000 of    125000
+   currently on    104000 of    125000
+   currently on    105000 of    125000
+   currently on    106000 of    125000
+   currently on    107000 of    125000
+   currently on    108000 of    125000
+   currently on    109000 of    125000
+   currently on    110000 of    125000
+   currently on    111000 of    125000
+   currently on    112000 of    125000
+   currently on    113000 of    125000
+   currently on    114000 of    125000
+   currently on    115000 of    125000
+   currently on    116000 of    125000
+   currently on    117000 of    125000
+   currently on    118000 of    125000
+   currently on    119000 of    125000
+   currently on    120000 of    125000
+   currently on    121000 of    125000
+   currently on    122000 of    125000
+   currently on    123000 of    125000
+   currently on    124000 of    125000
+   currently on    125000 of    125000
+ extract statistics total    401.343994    
+ total    401.671997    
+
+ GAMV Version: 3.000 Finished
+
+401.67user 0.00system 6:41.67elapsed 99%CPU (0avgtext+0avgdata 4868maxresident)k
+0inputs+32outputs (0major+615minor)pagefaults 0swaps

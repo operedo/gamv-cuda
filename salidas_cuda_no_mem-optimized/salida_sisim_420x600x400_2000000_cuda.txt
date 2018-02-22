@@ -1,0 +1,45 @@
+
+
+-------------- Starting GPU variogram calculations ----------------
+
+blocks.x=3907, blocks.y=3907, blocks.z=1
+Time for variogram kernel: 398931.562500 ms
+GPU time: 398.931549
+
+------------------------------
+
+
+ GAMV Version: 3.000
+
+  data file = sisim.out_420x600x400_2000000_header    
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out                                
+  number of lags =           20
+  lag distance =    5.00000000    
+  lag tolerance =    1.00000000    
+  number of directions =            1
+  azm, atol, bandwh =    0.00000000       90.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       90.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            1
+  tail,head,type =            1           1          10
+  indicator threshold =    9.00000000    
+
+ maxdat =      2000000
+ Variable number            1
+   Number   =      2000000
+   Average  =    4.53160238    
+   Variance =    2.91402221    
+
+ Variogram  1 Indicator 1/2 Variogram:  tail=Indicator  1 head=Indicator  1   
+ Parameters ok.
+ extract statistics total    400.523987    
+ total    405.523987    
+
+ GAMV Version: 3.000 Finished
+
+310.16user 95.76system 6:51.09elapsed 98%CPU (0avgtext+0avgdata 164184maxresident)k
+0inputs+16outputs (0major+4206minor)pagefaults 0swaps

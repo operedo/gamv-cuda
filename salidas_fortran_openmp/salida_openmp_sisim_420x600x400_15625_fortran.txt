@@ -1,0 +1,54 @@
+
+ GAMV Version: 3.000
+
+  data file = sisim.out_420x600x400_15625_header      
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out_sisim_420x600x400_15625_fortran
+  number of lags =           20
+  lag distance =    5.00000000    
+  lag tolerance =    1.00000000    
+  number of directions =            1
+  azm, atol, bandwh =    0.00000000       90.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       90.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            1
+  tail,head,type =            1           1          10
+  indicator threshold =    9.00000000    
+
+ maxdat =        15625
+ Variable number            1
+   Number   =        15625
+   Average  =    4.53894377    
+   Variance =    2.96208334    
+
+ Variogram  1 Indicator 1/2 Variogram:  tail=Indicator  1 head=Indicator  1   
+ Parameters ok.
+ Thread            1
+ Thread            2
+ Thread            4
+ Thread            5
+ Thread            6
+ Thread            3
+   currently on      1000 of     15625 with thread   3 and process   1
+   currently on      2000 of     15625 with thread   5 and process   1
+   currently on      3000 of     15625 with thread   1 and process   1
+   currently on      4000 of     15625 with thread   4 and process   1
+   currently on      5000 of     15625 with thread   6 and process   1
+   currently on      6000 of     15625 with thread   1 and process   1
+   currently on      7000 of     15625 with thread   5 and process   1
+   currently on      8000 of     15625 with thread   1 and process   1
+   currently on      9000 of     15625 with thread   4 and process   1
+   currently on     10000 of     15625 with thread   4 and process   1
+   currently on     11000 of     15625 with thread   6 and process   1
+   currently on     12000 of     15625 with thread   6 and process   1
+   currently on     13000 of     15625 with thread   2 and process   1
+   currently on     14000 of     15625 with thread   1 and process   1
+   currently on     15000 of     15625 with thread   5 and process   1
+
+ GAMV Version: 3.000 Finished
+
+0.51user 0.00system 0:00.15elapsed 335%CPU (0avgtext+0avgdata 3500maxresident)k
+0inputs+16outputs (0major+237minor)pagefaults 0swaps

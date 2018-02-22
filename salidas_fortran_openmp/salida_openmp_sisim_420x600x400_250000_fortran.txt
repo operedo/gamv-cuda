@@ -1,0 +1,289 @@
+
+ GAMV Version: 3.000
+
+  data file = sisim.out_420x600x400_250000_header     
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out_sisim_420x600x400_250000_fortra
+  number of lags =           20
+  lag distance =    5.00000000    
+  lag tolerance =    1.00000000    
+  number of directions =            1
+  azm, atol, bandwh =    0.00000000       90.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       90.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            1
+  tail,head,type =            1           1          10
+  indicator threshold =    9.00000000    
+
+ maxdat =       250000
+ Variable number            1
+   Number   =       250000
+   Average  =    4.53655577    
+   Variance =    2.91542363    
+
+ Variogram  1 Indicator 1/2 Variogram:  tail=Indicator  1 head=Indicator  1   
+ Parameters ok.
+ Thread            1
+ Thread            2
+ Thread            3
+ Thread            5
+ Thread            4
+ Thread            6
+   currently on      1000 of    250000 with thread   5 and process   1
+   currently on      2000 of    250000 with thread   1 and process   1
+   currently on      3000 of    250000 with thread   3 and process   1
+   currently on      4000 of    250000 with thread   2 and process   1
+   currently on      5000 of    250000 with thread   6 and process   1
+   currently on      6000 of    250000 with thread   4 and process   1
+   currently on      7000 of    250000 with thread   4 and process   1
+   currently on      8000 of    250000 with thread   1 and process   1
+   currently on      9000 of    250000 with thread   5 and process   1
+   currently on     10000 of    250000 with thread   3 and process   1
+   currently on     11000 of    250000 with thread   2 and process   1
+   currently on     12000 of    250000 with thread   4 and process   1
+   currently on     13000 of    250000 with thread   2 and process   1
+   currently on     14000 of    250000 with thread   1 and process   1
+   currently on     15000 of    250000 with thread   1 and process   1
+   currently on     16000 of    250000 with thread   2 and process   1
+   currently on     17000 of    250000 with thread   5 and process   1
+   currently on     18000 of    250000 with thread   2 and process   1
+   currently on     19000 of    250000 with thread   1 and process   1
+   currently on     20000 of    250000 with thread   3 and process   1
+   currently on     21000 of    250000 with thread   1 and process   1
+   currently on     22000 of    250000 with thread   1 and process   1
+   currently on     23000 of    250000 with thread   2 and process   1
+   currently on     24000 of    250000 with thread   1 and process   1
+   currently on     25000 of    250000 with thread   2 and process   1
+   currently on     26000 of    250000 with thread   2 and process   1
+   currently on     27000 of    250000 with thread   4 and process   1
+   currently on     28000 of    250000 with thread   2 and process   1
+   currently on     29000 of    250000 with thread   1 and process   1
+   currently on     30000 of    250000 with thread   3 and process   1
+   currently on     31000 of    250000 with thread   3 and process   1
+   currently on     32000 of    250000 with thread   4 and process   1
+   currently on     33000 of    250000 with thread   2 and process   1
+   currently on     34000 of    250000 with thread   1 and process   1
+   currently on     35000 of    250000 with thread   1 and process   1
+   currently on     36000 of    250000 with thread   6 and process   1
+   currently on     37000 of    250000 with thread   1 and process   1
+   currently on     38000 of    250000 with thread   6 and process   1
+   currently on     39000 of    250000 with thread   2 and process   1
+   currently on     40000 of    250000 with thread   6 and process   1
+   currently on     41000 of    250000 with thread   6 and process   1
+   currently on     42000 of    250000 with thread   5 and process   1
+   currently on     43000 of    250000 with thread   6 and process   1
+   currently on     44000 of    250000 with thread   2 and process   1
+   currently on     45000 of    250000 with thread   4 and process   1
+   currently on     46000 of    250000 with thread   1 and process   1
+   currently on     47000 of    250000 with thread   6 and process   1
+   currently on     48000 of    250000 with thread   4 and process   1
+   currently on     49000 of    250000 with thread   2 and process   1
+   currently on     50000 of    250000 with thread   6 and process   1
+   currently on     51000 of    250000 with thread   2 and process   1
+   currently on     52000 of    250000 with thread   6 and process   1
+   currently on     53000 of    250000 with thread   4 and process   1
+   currently on     54000 of    250000 with thread   5 and process   1
+   currently on     55000 of    250000 with thread   5 and process   1
+   currently on     56000 of    250000 with thread   5 and process   1
+   currently on     57000 of    250000 with thread   6 and process   1
+   currently on     58000 of    250000 with thread   6 and process   1
+   currently on     59000 of    250000 with thread   3 and process   1
+   currently on     60000 of    250000 with thread   3 and process   1
+   currently on     61000 of    250000 with thread   2 and process   1
+   currently on     62000 of    250000 with thread   5 and process   1
+   currently on     63000 of    250000 with thread   1 and process   1
+   currently on     64000 of    250000 with thread   2 and process   1
+   currently on     65000 of    250000 with thread   3 and process   1
+   currently on     66000 of    250000 with thread   3 and process   1
+   currently on     67000 of    250000 with thread   4 and process   1
+   currently on     68000 of    250000 with thread   4 and process   1
+   currently on     69000 of    250000 with thread   2 and process   1
+   currently on     70000 of    250000 with thread   3 and process   1
+   currently on     71000 of    250000 with thread   5 and process   1
+   currently on     72000 of    250000 with thread   3 and process   1
+   currently on     73000 of    250000 with thread   5 and process   1
+   currently on     74000 of    250000 with thread   1 and process   1
+   currently on     75000 of    250000 with thread   1 and process   1
+   currently on     76000 of    250000 with thread   3 and process   1
+   currently on     77000 of    250000 with thread   4 and process   1
+   currently on     78000 of    250000 with thread   2 and process   1
+   currently on     79000 of    250000 with thread   6 and process   1
+   currently on     80000 of    250000 with thread   6 and process   1
+   currently on     81000 of    250000 with thread   3 and process   1
+   currently on     82000 of    250000 with thread   2 and process   1
+   currently on     83000 of    250000 with thread   4 and process   1
+   currently on     84000 of    250000 with thread   2 and process   1
+   currently on     85000 of    250000 with thread   3 and process   1
+   currently on     86000 of    250000 with thread   1 and process   1
+   currently on     87000 of    250000 with thread   5 and process   1
+   currently on     88000 of    250000 with thread   4 and process   1
+   currently on     89000 of    250000 with thread   4 and process   1
+   currently on     90000 of    250000 with thread   2 and process   1
+   currently on     91000 of    250000 with thread   6 and process   1
+   currently on     92000 of    250000 with thread   6 and process   1
+   currently on     93000 of    250000 with thread   3 and process   1
+   currently on     94000 of    250000 with thread   6 and process   1
+   currently on     95000 of    250000 with thread   1 and process   1
+   currently on     96000 of    250000 with thread   5 and process   1
+   currently on     97000 of    250000 with thread   6 and process   1
+   currently on     98000 of    250000 with thread   5 and process   1
+   currently on     99000 of    250000 with thread   6 and process   1
+   currently on    100000 of    250000 with thread   5 and process   1
+   currently on    101000 of    250000 with thread   5 and process   1
+   currently on    102000 of    250000 with thread   1 and process   1
+   currently on    103000 of    250000 with thread   1 and process   1
+   currently on    104000 of    250000 with thread   3 and process   1
+   currently on    105000 of    250000 with thread   3 and process   1
+   currently on    106000 of    250000 with thread   1 and process   1
+   currently on    107000 of    250000 with thread   2 and process   1
+   currently on    108000 of    250000 with thread   6 and process   1
+   currently on    109000 of    250000 with thread   6 and process   1
+   currently on    110000 of    250000 with thread   1 and process   1
+   currently on    111000 of    250000 with thread   6 and process   1
+   currently on    112000 of    250000 with thread   3 and process   1
+   currently on    113000 of    250000 with thread   5 and process   1
+   currently on    114000 of    250000 with thread   1 and process   1
+   currently on    115000 of    250000 with thread   1 and process   1
+   currently on    116000 of    250000 with thread   3 and process   1
+   currently on    117000 of    250000 with thread   5 and process   1
+   currently on    118000 of    250000 with thread   6 and process   1
+   currently on    119000 of    250000 with thread   2 and process   1
+   currently on    120000 of    250000 with thread   1 and process   1
+   currently on    121000 of    250000 with thread   4 and process   1
+   currently on    122000 of    250000 with thread   3 and process   1
+   currently on    123000 of    250000 with thread   3 and process   1
+   currently on    124000 of    250000 with thread   3 and process   1
+   currently on    125000 of    250000 with thread   6 and process   1
+   currently on    126000 of    250000 with thread   2 and process   1
+   currently on    127000 of    250000 with thread   1 and process   1
+   currently on    128000 of    250000 with thread   4 and process   1
+   currently on    129000 of    250000 with thread   5 and process   1
+   currently on    130000 of    250000 with thread   4 and process   1
+   currently on    131000 of    250000 with thread   5 and process   1
+   currently on    132000 of    250000 with thread   2 and process   1
+   currently on    133000 of    250000 with thread   4 and process   1
+   currently on    134000 of    250000 with thread   4 and process   1
+   currently on    135000 of    250000 with thread   4 and process   1
+   currently on    136000 of    250000 with thread   6 and process   1
+   currently on    137000 of    250000 with thread   2 and process   1
+   currently on    138000 of    250000 with thread   5 and process   1
+   currently on    139000 of    250000 with thread   6 and process   1
+   currently on    140000 of    250000 with thread   6 and process   1
+   currently on    141000 of    250000 with thread   1 and process   1
+   currently on    142000 of    250000 with thread   5 and process   1
+   currently on    143000 of    250000 with thread   4 and process   1
+   currently on    144000 of    250000 with thread   6 and process   1
+   currently on    145000 of    250000 with thread   6 and process   1
+   currently on    146000 of    250000 with thread   5 and process   1
+   currently on    147000 of    250000 with thread   6 and process   1
+   currently on    148000 of    250000 with thread   4 and process   1
+   currently on    149000 of    250000 with thread   5 and process   1
+   currently on    150000 of    250000 with thread   5 and process   1
+   currently on    151000 of    250000 with thread   1 and process   1
+   currently on    152000 of    250000 with thread   3 and process   1
+   currently on    153000 of    250000 with thread   3 and process   1
+   currently on    154000 of    250000 with thread   5 and process   1
+   currently on    155000 of    250000 with thread   4 and process   1
+   currently on    156000 of    250000 with thread   4 and process   1
+   currently on    157000 of    250000 with thread   2 and process   1
+   currently on    158000 of    250000 with thread   2 and process   1
+   currently on    159000 of    250000 with thread   3 and process   1
+   currently on    160000 of    250000 with thread   1 and process   1
+   currently on    161000 of    250000 with thread   5 and process   1
+   currently on    162000 of    250000 with thread   6 and process   1
+   currently on    163000 of    250000 with thread   1 and process   1
+   currently on    164000 of    250000 with thread   1 and process   1
+   currently on    165000 of    250000 with thread   6 and process   1
+   currently on    166000 of    250000 with thread   5 and process   1
+   currently on    167000 of    250000 with thread   6 and process   1
+   currently on    168000 of    250000 with thread   2 and process   1
+   currently on    169000 of    250000 with thread   4 and process   1
+   currently on    170000 of    250000 with thread   1 and process   1
+   currently on    171000 of    250000 with thread   2 and process   1
+   currently on    172000 of    250000 with thread   2 and process   1
+   currently on    173000 of    250000 with thread   4 and process   1
+   currently on    174000 of    250000 with thread   5 and process   1
+   currently on    175000 of    250000 with thread   3 and process   1
+   currently on    176000 of    250000 with thread   2 and process   1
+   currently on    177000 of    250000 with thread   5 and process   1
+   currently on    178000 of    250000 with thread   5 and process   1
+   currently on    179000 of    250000 with thread   5 and process   1
+   currently on    180000 of    250000 with thread   1 and process   1
+   currently on    181000 of    250000 with thread   3 and process   1
+   currently on    182000 of    250000 with thread   2 and process   1
+   currently on    183000 of    250000 with thread   1 and process   1
+   currently on    184000 of    250000 with thread   1 and process   1
+   currently on    185000 of    250000 with thread   6 and process   1
+   currently on    186000 of    250000 with thread   4 and process   1
+   currently on    187000 of    250000 with thread   1 and process   1
+   currently on    188000 of    250000 with thread   6 and process   1
+   currently on    189000 of    250000 with thread   4 and process   1
+   currently on    190000 of    250000 with thread   1 and process   1
+   currently on    191000 of    250000 with thread   1 and process   1
+   currently on    192000 of    250000 with thread   3 and process   1
+   currently on    193000 of    250000 with thread   5 and process   1
+   currently on    194000 of    250000 with thread   3 and process   1
+   currently on    195000 of    250000 with thread   6 and process   1
+   currently on    196000 of    250000 with thread   2 and process   1
+   currently on    197000 of    250000 with thread   3 and process   1
+   currently on    198000 of    250000 with thread   6 and process   1
+   currently on    199000 of    250000 with thread   6 and process   1
+   currently on    200000 of    250000 with thread   2 and process   1
+   currently on    201000 of    250000 with thread   3 and process   1
+   currently on    202000 of    250000 with thread   2 and process   1
+   currently on    203000 of    250000 with thread   6 and process   1
+   currently on    204000 of    250000 with thread   5 and process   1
+   currently on    205000 of    250000 with thread   6 and process   1
+   currently on    206000 of    250000 with thread   4 and process   1
+   currently on    207000 of    250000 with thread   2 and process   1
+   currently on    208000 of    250000 with thread   2 and process   1
+   currently on    209000 of    250000 with thread   6 and process   1
+   currently on    210000 of    250000 with thread   5 and process   1
+   currently on    211000 of    250000 with thread   6 and process   1
+   currently on    212000 of    250000 with thread   1 and process   1
+   currently on    213000 of    250000 with thread   5 and process   1
+   currently on    214000 of    250000 with thread   2 and process   1
+   currently on    215000 of    250000 with thread   1 and process   1
+   currently on    216000 of    250000 with thread   3 and process   1
+   currently on    217000 of    250000 with thread   6 and process   1
+   currently on    218000 of    250000 with thread   2 and process   1
+   currently on    219000 of    250000 with thread   3 and process   1
+   currently on    220000 of    250000 with thread   6 and process   1
+   currently on    221000 of    250000 with thread   4 and process   1
+   currently on    222000 of    250000 with thread   6 and process   1
+   currently on    223000 of    250000 with thread   3 and process   1
+   currently on    224000 of    250000 with thread   4 and process   1
+   currently on    225000 of    250000 with thread   3 and process   1
+   currently on    226000 of    250000 with thread   2 and process   1
+   currently on    227000 of    250000 with thread   6 and process   1
+   currently on    228000 of    250000 with thread   3 and process   1
+   currently on    229000 of    250000 with thread   5 and process   1
+   currently on    230000 of    250000 with thread   6 and process   1
+   currently on    231000 of    250000 with thread   5 and process   1
+   currently on    232000 of    250000 with thread   6 and process   1
+   currently on    233000 of    250000 with thread   3 and process   1
+   currently on    234000 of    250000 with thread   4 and process   1
+   currently on    235000 of    250000 with thread   6 and process   1
+   currently on    236000 of    250000 with thread   3 and process   1
+   currently on    237000 of    250000 with thread   5 and process   1
+   currently on    238000 of    250000 with thread   2 and process   1
+   currently on    239000 of    250000 with thread   4 and process   1
+   currently on    240000 of    250000 with thread   2 and process   1
+   currently on    241000 of    250000 with thread   4 and process   1
+   currently on    242000 of    250000 with thread   5 and process   1
+   currently on    243000 of    250000 with thread   1 and process   1
+   currently on    244000 of    250000 with thread   3 and process   1
+   currently on    245000 of    250000 with thread   1 and process   1
+   currently on    246000 of    250000 with thread   1 and process   1
+   currently on    247000 of    250000 with thread   6 and process   1
+   currently on    248000 of    250000 with thread   5 and process   1
+   currently on    249000 of    250000 with thread   6 and process   1
+   currently on    250000 of    250000 with thread   3 and process   1
+
+ GAMV Version: 3.000 Finished
+
+117.60user 0.00system 0:20.20elapsed 582%CPU (0avgtext+0avgdata 8044maxresident)k
+0inputs+64outputs (0major+1382minor)pagefaults 0swaps

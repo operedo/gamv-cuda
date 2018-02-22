@@ -1,0 +1,37 @@
+Time for variogram kernel: 996.902771 ms
+GPU time: 0.996903
+------------------------------
+
+ GAMV Version: 3.000
+
+  data file = sgsim.out_800x800x160_62500_header      
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out_sgsim_800x800x160_62500_cuda   
+  number of lags =           40
+  lag distance =    20.0000000    
+  lag tolerance =    5.00000000    
+  number of directions =            1
+  azm, atol, bandwh =    0.00000000       90.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       90.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            1
+  tail,head,type =            1           1           1
+
+ maxdat =        62500
+ Variable number            1
+   Number   =        62500
+   Average  =   0.930731237    
+   Variance =   0.927434802    
+
+ Variogram  1 Semivariogram          :  tail=Var          head=Var            
+ Parameters ok.
+ extract statistics total    5.28399992    
+ total    5.45200014    
+
+ GAMV Version: 3.000 Finished
+
+0.97user 4.84system 0:07.96elapsed 73%CPU (0avgtext+0avgdata 86656maxresident)k
+0inputs+16outputs (0major+1970minor)pagefaults 0swaps

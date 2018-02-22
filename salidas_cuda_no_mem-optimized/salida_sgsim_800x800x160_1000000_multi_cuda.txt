@@ -1,0 +1,52 @@
+
+
+-------------- Starting GPU variogram calculations ----------------
+
+blocks.x=1954, blocks.y=1954, blocks.z=1
+Time for variogram kernel: 287199.625000 ms
+GPU time: 287.199615
+
+------------------------------
+
+
+ GAMV Version: 3.000
+
+  data file = sgsim.out_800x800x160_1000000_header    
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out_800x800x160_1000000_multi_cuda 
+  number of lags =           40
+  lag distance =    20.0000000    
+  lag tolerance =    5.00000000    
+  number of directions =            3
+  azm, atol, bandwh =    0.00000000       20.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       20.0000000       20.0000000    
+  azm, atol, bandwh =    45.0000000       20.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       20.0000000       20.0000000    
+  azm, atol, bandwh =    90.0000000       180.000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       20.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            2
+  tail,head,type =            1           1           1
+  tail,head,type =            1           1           5
+
+ maxdat =      1000000
+ Variable number            1
+   Number   =      1000000
+   Average  =   0.933355629    
+   Variance =   0.933751464    
+
+ Variogram  1 Semivariogram          :  tail=Var          head=Var            
+ Variogram  2 General Relative       :  tail=Var          head=Var            
+  WARNING: there are both positive and negative values - lag mean could be zero!
+  WARNING: there are both positive and negative values - lag mean could be zero!
+ Parameters ok.
+ extract statistics total    291.183990    
+ total    293.884003    
+
+ GAMV Version: 3.000 Finished
+
+229.80user 64.46system 4:56.62elapsed 99%CPU (0avgtext+0avgdata 116932maxresident)k
+0inputs+48outputs (0major+3913minor)pagefaults 0swaps
