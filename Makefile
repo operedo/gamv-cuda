@@ -40,10 +40,11 @@ NVLIBS= -L/usr/local/cuda-8.0/lib64 -lcuda -lcudart
 F_OBJECTS= extractStatisticsFortran.o
 C_OBJECTS= extractStatisticsCwrapper.o 
 CU_OBJECTS= extractStatisticsCUDAwrapper.o  
+CUOMP_OBJECTS= extractStatisticsCUDAOMPwrapper.o  
 
 GSLIB=../gslib-alges/gslib/gslib.a 
 
-all: seq-for seq-c cuda
+all: seq-for seq-c cuda cudaomp
 
 #seq-for: gslib $(F_OBJECTS)
 seq-for: gslib
@@ -70,6 +71,14 @@ cuda: gslib
 #	$(NVCC)  $(CU_OBJECTS) -arch=sm_35 -lcudadevrt -dlink -o extractStatisticsCUDAwrapper.o
 #	$(FC) -DCUDA $(FFLAGS) $(INCS) $(NVINCS) gamv.o dlink.o -o gamv.exe $(GSLIB) $(NVLIBS) $(LIBS)
 	$(FC) -DCUDA $(FFLAGS) $(INCS) $(NVINCS) gamv.o $(CU_OBJECTS) -o gamvCUDA.exe $(GSLIB) $(NVLIBS) $(LIBS) 
+
+cudaomp: gslib
+	$(FC) -DCUDAOMP -c $(FFLAGS) $(OPENMP) gamv.for
+	$(NVCC)  $(NVFLAGS)  -Xcompiler -fopenmp extractStatisticsCUDAOMPwrapper.cu
+#	$(NVCC)  $(CU_OBJECTS) -arch=sm_35 -lcudadevrt -dlink -o extractStatisticsCUDAwrapper.o
+#	$(FC) -DCUDA $(FFLAGS) $(INCS) $(NVINCS) gamv.o dlink.o -o gamv.exe $(GSLIB) $(NVLIBS) $(LIBS)
+	$(FC) -DCUDAOMP $(FFLAGS) $(INCS) $(NVINCS) gamv.o $(CUOMP_OBJECTS) -o gamvCUDAOMP.exe $(GSLIB) $(OPENMPLIBS) $(NVLIBS) $(LIBS) 
+
 
 gslib:
 	cd ../gslib-alges/gslib; make clean; make gslib.a COMPILER="$(FC)" FLAGS="$(FFLAGS)" OMP=" "; cd -
