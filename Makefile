@@ -6,10 +6,10 @@ CC=gcc
 FC=gfortran
 NVCC=nvcc
 #FFLAGS= -cpp -Wall -pedantic -O3
-FFLAGS= -g -cpp -O3
-CFLAGS= -g -O3 
+FFLAGS= -cpp -O2 -march=native -ffast-math -ftree-vectorize
+CFLAGS= -O3 
 #NVFLAGS= -ccbin=/Soft/gcc/4.7.2/bin/gcc -m64 -c -O3 -arch=sm_35
-NVFLAGS= -g -m64 -c -O3 -arch=sm_35
+NVFLAGS= -m64 -c -O3 -arch=sm_35
 
 #OPENMP=-fopenmp
 #INCS= -I.
@@ -26,7 +26,7 @@ INCS= -I.
 NVINCS= -I/usr/local/cuda-8.0/include
 #NVINCS= -I/Soft/cuda/6.5.14/include/
 OPENMPLIBS= -lgomp 
-LIBS= -lm 
+LIBS= -lstdc++ -lm
 #NVLIBS= -L/usr/local/cuda-6.5/lib64 -lcuda -lcudart /usr/local/cuda-6.5/lib64/libcudadevrt.a
 NVLIBS= -L/usr/local/cuda-8.0/lib64 -lcuda -lcudart 
 #NVLIBS= -L/Soft/cuda/6.5.14/lib64 -lcuda -lcudart 

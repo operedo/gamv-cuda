@@ -99,6 +99,7 @@ c gamv variables
       integer extractValue
       integer :: extractstatisticscwrapper
       integer :: extractstatisticscudawrapper
+      integer :: extractstatisticscudaompwrapper
 
 c writeout variables
       character titlewr*132
@@ -675,6 +676,14 @@ c     call system_clock(COUNT=clock_start)
      + uvxazm,uvyazm,uvzdec,uvhdec,csatol,csdtol,bandwh,bandwd,
      + atol,ivtype,ivtail,ivhead,vr)
 #else
+#ifdef CUDAOMP
+      extractValue = extractStatisticsCUDAOMPwrapper(
+     + nd,irepo,maxdat,MAXVAR,x,y,z,EPSLON,nlag,xlag,xltol,
+     + mxdlv,np,dis,gam,hm,tm,hv,tv,numThreads,reducedVariables,
+     + dismxs,tmax,tmin,ndir,nvarg,
+     + uvxazm,uvyazm,uvzdec,uvhdec,csatol,csdtol,bandwh,bandwd,
+     + atol,ivtype,ivtail,ivhead,vr)
+#else
 #ifdef FORTRAN
       extractValue = extractStatisticsFortran(
      + nd,irepo,maxdat,MAXVAR,x,y,z,EPSLON,nlag,xlag,xltol,
@@ -682,6 +691,7 @@ c     call system_clock(COUNT=clock_start)
      + dismxs,tmax,tmin,ndir,nvarg,
      + uvxazm,uvyazm,uvzdec,uvhdec,csatol,csdtol,bandwh,bandwd,
      + atol,ivtype,ivtail,ivhead,vr)
+#endif
 #endif
 #endif
 #endif

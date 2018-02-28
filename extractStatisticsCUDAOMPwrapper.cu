@@ -16,7 +16,7 @@ Add description and legal texts
 #define DT double
 #define MAX(x,y)  ((x) >= (y) ? (x) : (y))
 #define MIN(x,y)  ((x) < (y) ? (x) : (y))
-#define MEM_OPTIMIZED 0
+#define MEM_OPTIMIZED 1
 #define THREADSX 32
 #define THREADSY THREADSX
 
@@ -287,6 +287,9 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
     float band,dcazm,dcdec,dxy,vrh,vrhpr,vrt,vrtpr,h;
     int omni;
 
+    //printf("i=%d,j=%d\n",i,j);
+    if(i<nd && j<nd){
+
     dx  = d_x[i] - d_x[j];
     dy  = d_y[i] - d_y[j];
     dz  = d_z[i] - d_z[j];
@@ -424,6 +427,12 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
                                         for(il=lagbeg;il<=lagend;il++){
                                             ii = (id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2)+il -1;
 
+						sh_np[ii + mxdlv*sh_pos]+=1.0;
+						sh_dis[ii + mxdlv*sh_pos]+=(h);
+						sh_tm[ii + mxdlv*sh_pos]+=(vrt);
+						sh_hm[ii + mxdlv*sh_pos]+=(vrh);
+						sh_gam[ii + mxdlv*sh_pos]+=((vrh-vrt)*(vrh-vrt));
+
 
 
                                             //atomicAdd(&sh_np[ii + mxdlv*sh_pos],1.0);
@@ -434,6 +443,14 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
 
                                             if(omni){
                                                 if(vrtpr>=tmin && vrhpr>=tmin && vrtpr<tmax && vrhpr<tmax){
+
+						sh_np[ii + mxdlv*sh_pos]+=1.0;
+						sh_dis[ii + mxdlv*sh_pos]+=(h);
+						sh_tm[ii + mxdlv*sh_pos]+=(vrtpr);
+						sh_hm[ii + mxdlv*sh_pos]+=(vrhpr);
+						sh_gam[ii + mxdlv*sh_pos]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
+
+
 
                                                     //atomicAdd(&sh_np[ii + mxdlv*sh_pos],1.0);
                                                     //atomicAdd(&sh_dis[ii + mxdlv*sh_pos],(h));
@@ -451,6 +468,13 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
                                     else if(it==2){
                                         for(il=lagbeg;il<=lagend;il++){
                                             ii = (id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2)+il -1;
+						sh_np[ii + mxdlv*sh_pos]+=1.0;
+						sh_dis[ii + mxdlv*sh_pos]+=(h);
+						sh_tm[ii + mxdlv*sh_pos]+=(0.5*(vrt+vrtpr));
+						sh_hm[ii + mxdlv*sh_pos]+=(0.5*(vrh+vrhpr));
+						sh_gam[ii + mxdlv*sh_pos]+=((vrhpr-vrh)*(vrt-vrtpr));
+
+
                                             //atomicAdd(&sh_np[ii + mxdlv*sh_pos],1.0);
                                             //atomicAdd(&sh_dis[ii + mxdlv*sh_pos],(h));
                                             //atomicAdd(&sh_tm[ii + mxdlv*sh_pos],(0.5*(vrt+vrtpr)));
@@ -474,6 +498,9 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
             }
         }
     }
+
+    }
+
 }
 
 
@@ -578,6 +605,7 @@ __host__ void computePointsValuesOMP(int idx, int  idy,const int nd, const int i
     int i,j;
     j = idx + half_nd;
     i = idy;
+
     computeVariogramOMP(i,j,nd,irepo,maxdat,MAXVAR,
         d_x,d_y,d_z,
         EPSLON,nlag,xlag,xltol,
@@ -656,7 +684,7 @@ __global__ void variogramKernelMemoryOptimized(const int nd, const int irepo, co
                                     float *d_csatol, float *d_csdtol, float *d_bandwh, float *d_bandwd,
                                     float *d_atol,
                                     int *d_ivtype, int *d_ivtail, int *d_ivhead,
-                                    float *d_vr,int chunks_sh_mem,int frac_nd){
+                                    float *d_vr,int chunks_sh_mem,int frac_nd, int thres_hybrid){
 
     int tidx=threadIdx.x;
     int tidy=threadIdx.y;
@@ -690,7 +718,8 @@ __global__ void variogramKernelMemoryOptimized(const int nd, const int irepo, co
 
     __syncthreads();
 
-    if (idx < frac_nd && idy < frac_nd){
+    //if (idx < frac_nd && idy < frac_nd){
+    if (idx>=thres_hybrid && idy>=thres_hybrid && idx < frac_nd && idy < frac_nd){
         for (i = idx; i < half_nd; i += frac_nd){
             for (j = idy; j < half_nd; j += frac_nd){
                 computePointsValues(i,j,nd,irepo,maxdat,MAXVAR,
@@ -815,7 +844,7 @@ __host__ void variogramKernelOMP(    const int nd, const int irepo, const int ma
                                     const int nlag,
                                     const float xlag, const float xltol,
                                     const int mxdlv,
-                                    DT *d_np, DT *d_dis, DT *d_gam, DT *d_hm, DT *d_tm,
+                                    DT *h_np, DT *h_dis, DT *h_gam, DT *h_hm, DT *h_tm,
                                     const float dismxs, const float tmax, const float tmin,
                                     const int ndir, const int nvarg,
                                     float *d_uvxazm,  float *d_uvyazm,  float *d_uvzdec,  float *d_uvhdec,
@@ -823,7 +852,7 @@ __host__ void variogramKernelOMP(    const int nd, const int irepo, const int ma
                                     float *d_atol,
                                     int *d_ivtype, int *d_ivtail, int *d_ivhead,
                                     float *d_vr,int frac_nd, int thres_hybrid){
-	printf("Inside host kernel\n");
+    printf("Inside host kernel\n");
     //int tidx=threadIdx.x;
     //int tidy=threadIdx.y;
     //int bidx=blockIdx.x;
@@ -837,18 +866,27 @@ __host__ void variogramKernelOMP(    const int nd, const int irepo, const int ma
     //int threadId = tidx + bdimx*tidy;
     int threadId=0;
     int half_nd = nd/2;
-    int i,j;
+    int i,j,ii,jj;
     //int num_threads = bdimx*bdimy;
     int num_threads=1;
+#pragma omp parallel
+{
+    num_threads=omp_get_num_threads();
+}
+    printf("num_threads=%d\n",num_threads);
     //extern __shared__ float buffer[];
     float buffer[num_threads*mxdlv*5] ;
     for(i=0;i<num_threads*mxdlv*5;i++)
         buffer[i]=0;
     float *sh_np = &buffer[0];
-    float *sh_dis = &buffer[mxdlv];
-    float *sh_gam = &buffer[2*mxdlv];
-    float *sh_hm = &buffer[3*mxdlv];
-    float *sh_tm = &buffer[4*mxdlv];
+    float *sh_dis = &buffer[mxdlv*num_threads];
+    float *sh_gam = &buffer[2*mxdlv*num_threads];
+    float *sh_hm = &buffer[3*mxdlv*num_threads];
+    float *sh_tm = &buffer[4*mxdlv*num_threads];
+
+
+    int blocksx = (frac_nd + THREADSX - 1)/THREADSX;
+    int blocksy = (frac_nd + THREADSY - 1)/THREADSY;
 
     //int init_sh_mem = threadId;
     //while (init_sh_mem < mxdlv){
@@ -864,11 +902,18 @@ __host__ void variogramKernelOMP(    const int nd, const int irepo, const int ma
 
     //if (idx < frac_nd && idy < frac_nd){
     //if (idx<thres_hybrid || idy<thres_hybrid){
-    for(idy=0;idy<frac_nd;idy++){
-    for(idx=0;idx<thres_hybrid;idx++){
-        for (i = idx; i < half_nd; i += frac_nd){
-            for (j = idy; j < half_nd; j += frac_nd){
-                computePointsValuesOMP(i,j,nd,irepo,maxdat,MAXVAR,
+#pragma omp parallel shared(d_x,d_y,d_z,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,d_vr)
+{
+    threadId=omp_get_thread_num();
+
+    //for(idy=0;idy<blocksy;idy++){
+    //for(idx=0;idx<thres_hybrid;idx++){
+    #pragma omp for nowait
+    for (jj = 0; jj < half_nd; jj += 1){
+        for (ii = 0; ii < thres_hybrid*THREADSX/2; ii += 1){
+            //for (i = ii; i < nd; i += half_nd){
+            //    for (j = jj; j < nd; j += half_nd){
+                computePointsValuesOMP(ii,jj,nd,irepo,maxdat,MAXVAR,
                     d_x,d_y,d_z,
                     EPSLON,nlag,xlag,xltol,
                     mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
@@ -877,17 +922,22 @@ __host__ void variogramKernelOMP(    const int nd, const int irepo, const int ma
                     d_csatol, d_csdtol, d_bandwh, d_bandwd,
                     d_atol,
                     d_ivtype, d_ivtail, d_ivhead,
-                    d_vr,0,half_nd);
-            }
-        }
+                    d_vr,threadId,half_nd);
+        //    }
+        //}
+        //    }
+        //}
     }
     }
 
-    for(idx=thres_hybrid;idx<frac_nd;idx++){
-    for(idy=0;idy<thres_hybrid;idy++){
-        for (i = idx; i < half_nd; i += frac_nd){
-            for (j = idy; j < half_nd; j += frac_nd){
-                computePointsValuesOMP(i,j,nd,irepo,maxdat,MAXVAR,
+    //for(idx=thres_hybrid;idx<blocksx;idx++){
+    //for(idy=0;idy<thres_hybrid;idy++){
+    #pragma omp for nowait
+    for (ii = thres_hybrid*THREADSX/2; ii < half_nd; ii += 1){
+        for (jj = 0; jj < thres_hybrid*THREADSY/2; jj += 1){
+            //for (i = ii; i < nd; i += half_nd){
+            //    for (j = jj; j < nd; j += half_nd){
+                computePointsValuesOMP(ii,jj,nd,irepo,maxdat,MAXVAR,
                     d_x,d_y,d_z,
                     EPSLON,nlag,xlag,xltol,
                     mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
@@ -896,15 +946,29 @@ __host__ void variogramKernelOMP(    const int nd, const int irepo, const int ma
                     d_csatol, d_csdtol, d_bandwh, d_bandwd,
                     d_atol,
                     d_ivtype, d_ivtail, d_ivhead,
-                    d_vr,0,half_nd);
-            }
-        }
+                    d_vr,threadId,half_nd);
+        //    }
+        //}
+        //    }
+        //}
     }
     }
-
+}
 
 
     //__syncthreads();
+
+	for(threadId=0;threadId<num_threads;threadId++){
+	for(ii=0;ii<mxdlv;ii++){
+		h_np[ii]+=sh_np[ii+threadId*mxdlv];
+		h_dis[ii]+=sh_dis[ii+threadId*mxdlv];
+		h_tm[ii]+=sh_tm[ii+threadId*mxdlv];
+		h_hm[ii]+=sh_hm[ii+threadId*mxdlv];
+		h_gam[ii]+=sh_gam[ii+threadId*mxdlv];
+	}
+	}
+
+
 
 //    if (threadId < mxdlv){
 //
@@ -954,6 +1018,7 @@ extern "C" int extractstatisticscudaompwrapper_(
 	float *d_x,*d_y,*d_z;
 	DT *d_np,*d_dis,*d_gam,*d_hm,*d_tm;
 	DT *h_np,*h_dis,*h_gam,*h_hm,*h_tm;
+	DT *hh_np,*hh_dis,*hh_gam,*hh_hm,*hh_tm;
 	float *d_uvxazm,*d_uvyazm,*d_uvzdec,*d_uvhdec,*d_csatol,*d_csdtol,*d_bandwh,*d_bandwd,*d_atol,*d_vr;
 	int *d_ivtype,*d_ivtail,*d_ivhead;
 
@@ -964,7 +1029,7 @@ extern "C" int extractstatisticscudaompwrapper_(
 	cudaStreamCreate(&streamid);
 
 	// CUDA kernel will process the first half of the data.
-	float thres_factor = 0.1f;
+	float thres_factor = 0.2f;
 	int thres_hybrid = (int)(thres_factor*(float)(*maxdat/THREADSX));
 	
 
@@ -979,6 +1044,13 @@ extern "C" int extractstatisticscudaompwrapper_(
 	h_gam = (DT*)malloc(sizeof(DT)* *mxdlv);
 	h_hm = (DT*)malloc(sizeof(DT)* *mxdlv);
 	h_tm = (DT*)malloc(sizeof(DT)* *mxdlv);
+	hh_np = (DT*)malloc(sizeof(DT)* *mxdlv);
+	hh_dis = (DT*)malloc(sizeof(DT)* *mxdlv);
+	hh_gam = (DT*)malloc(sizeof(DT)* *mxdlv);
+	hh_hm = (DT*)malloc(sizeof(DT)* *mxdlv);
+	hh_tm = (DT*)malloc(sizeof(DT)* *mxdlv);
+
+
 	int shared_mem_size;
     	int i;
     	for (i = 0; i < *mxdlv; i++){
@@ -987,6 +1059,11 @@ extern "C" int extractstatisticscudaompwrapper_(
         	h_gam[i] = 0.0;
         	h_hm[i] = 0.0;
         	h_tm[i] = 0.0;
+        	hh_np[i] = 0.0;
+        	hh_dis[i] = 0.0;
+        	hh_gam[i] = 0.0;
+        	hh_hm[i] = 0.0;
+        	hh_tm[i] = 0.0;
     	}
    	cudaMalloc( (void **)&d_x, sizeof(float) * (*maxdat) );
    	//Check_CUDA_Error("malloc coord");
@@ -1104,7 +1181,7 @@ extern "C" int extractstatisticscudaompwrapper_(
                                             d_csatol,d_csdtol,d_bandwh,d_bandwd,
                                             d_atol,
                                             d_ivtype,d_ivtail,d_ivhead,
-                                            d_vr,chunk_sh_mem,frac_nd);
+                                            d_vr,chunk_sh_mem,frac_nd,thres_hybrid);
         	//cudaDeviceSynchronize();
         	cudaStreamSynchronize(streamid);
         	Check_CUDA_Error("fitness kernel");
@@ -1148,31 +1225,28 @@ extern "C" int extractstatisticscudaompwrapper_(
                 printf ("Time for variogram kernel: %f ms\n", time);
         	printf ("GPU time: %f\n", time/1000);
         	printf("------------------------------\n");
+    	}
 
 
-		
-		variogramKernelOMP(*nd,*irepo,*maxdat,*MAXVAR,
-                                            x,y,z,
-                                            *EPSLON,
-                                            *nlag,
-                                            *xlag,*xltol,
-                                            *mxdlv,
-                                            np,dis,gam,hm,tm,
-                                            *dismxs,*tmax,*tmin,
-                                            *ndir,*nvarg,
-                                            uvxazm,uvyazm,uvzdec,uvhdec,
-                                            csatol,csdtol,bandwh,bandwd,
-                                            atol,
-                                            ivtype,ivtail,ivhead,
-                                            vr,frac_nd,thres_hybrid);
+	variogramKernelOMP(*nd,*irepo,*maxdat,*MAXVAR,
+                                    x,y,z,
+                                    *EPSLON,
+                                    *nlag,
+                                    *xlag,*xltol,
+                                    *mxdlv,
+                                    hh_np,hh_dis,hh_gam,hh_hm,hh_tm,
+                                    *dismxs,*tmax,*tmin,
+                                    *ndir,*nvarg,
+                                    uvxazm,uvyazm,uvzdec,uvhdec,
+                                    csatol,csdtol,bandwh,bandwd,
+                                    atol,
+                                    ivtype,ivtail,ivhead,
+                                    vr,frac_nd,thres_hybrid);
  
 
 
 
-    	}
-
-
-
+	cudaStreamSynchronize(0);
 
 
     	cudaMemcpyAsync( h_np, d_np,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
@@ -1190,7 +1264,6 @@ extern "C" int extractstatisticscudaompwrapper_(
 	//    float sum_np = 0.0;
  
 
-	cudaStreamSynchronize(0);
 	cudaStreamDestroy(streamid);
 
 
@@ -1202,6 +1275,15 @@ extern "C" int extractstatisticscudaompwrapper_(
         	tm[i] = (double)h_tm[i];
       	//  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
     	}
+   	for (i = 0; i < *mxdlv; i++){
+        	np[i] += (double)hh_np[i];
+        	dis[i] += (double)hh_dis[i];
+        	gam[i] += (double)hh_gam[i];
+        	hm[i] += (double)hh_hm[i];
+        	tm[i] += (double)hh_tm[i];
+      	//  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
+    	}
+
 
 
     	cudaFree(d_x);
@@ -1230,6 +1312,11 @@ extern "C" int extractstatisticscudaompwrapper_(
     	free(h_gam);
     	free(h_hm);
     	free(h_tm);
+    	free(hh_np);
+    	free(hh_dis);
+    	free(hh_gam);
+    	free(hh_hm);
+    	free(hh_tm);
 	return 0;
 //end routine
 }
