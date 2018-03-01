@@ -7,10 +7,10 @@ FC=gfortran
 NVCC=nvcc
 #FFLAGS= -cpp -Wall -pedantic -O3
 #FFLAGS= -g -cpp -O2 -march=native -ffast-math -ftree-vectorize
-FFLAGS= -pg -cpp -O3 
-CFLAGS= -pg -O3 
+FFLAGS= -cpp -O3 
+CFLAGS= -O3 
 #NVFLAGS= -ccbin=/Soft/gcc/4.7.2/bin/gcc -m64 -c -O3 -arch=sm_35
-NVFLAGS= -g -m64 -c -O3 -arch=sm_35
+NVFLAGS= -m64 -c -O3 -arch=sm_35
 
 #OPENMP=-fopenmp
 #INCS= -I.
