@@ -314,20 +314,20 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
         else{
             lagbeg = -1;
             lagend = -1;
-            for(ilag=2;ilag<=nlag+2;ilag++){
-                if(h>=(xlag*(float)(ilag-2)-xltol) && h<=(xlag*(float)(ilag-2)+xltol)){
-                    if(lagbeg<0) lagbeg = ilag;
-                    lagend = ilag;
-                }
-            }
-
-            //int ilag=0;
-            //int liminf=ceil((h-xltol)*xlaginv)+2;
-            //int limsup=floor((h+xltol)*xlaginv)+2;
-            //for(ilag=liminf;ilag<=limsup;ilag++){
-            //    if(lagbeg<0)lagbeg=ilag;
-            //    lagend=ilag;
+            //for(ilag=2;ilag<=nlag+2;ilag++){
+            //    if(h>=(xlag*(float)(ilag-2)-xltol) && h<=(xlag*(float)(ilag-2)+xltol)){
+            //        if(lagbeg<0) lagbeg = ilag;
+            //        lagend = ilag;
+            //    }
             //}
+
+            int ilag=0;
+            int liminf=ceil((h-xltol)*xlaginv)+2;
+            int limsup=floor((h+xltol)*xlaginv)+2;
+            for(ilag=liminf;ilag<=limsup;ilag++){
+                if(lagbeg<0)lagbeg=ilag;
+                lagend=ilag;
+            }
 	}
         if(lagend>=0)
         {
@@ -1018,7 +1018,7 @@ __host__ void variogramKernelOMPOptimized(    const int nd, const int irepo, con
     int idx=0;
     int idy=0;
     //int threadId = tidx + bdimx*tidy;
-    int threadId=0;
+    //int threadId=0;
     int half_nd = nd/2;
     int i,j,ii,jj;
     //int num_threads = bdimx*bdimy;
@@ -1054,114 +1054,228 @@ __host__ void variogramKernelOMPOptimized(    const int nd, const int irepo, con
 
     //__syncthreads();
 
-    int thresTHREADSYhalf =thres_hybrid*THREADSY/2; 
-    int thresTHREADSXhalf =thres_hybrid*THREADSX/2; 
-    printf("thres=%d\n",thresTHREADSYhalf);
     //if (idx < frac_nd && idy < frac_nd){
     //if (idx<thres_hybrid || idy<thres_hybrid){
-#pragma omp parallel shared(d_x,d_y,d_z,buffer,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,d_vr)
+
+//    int thresTHREADSYhalf =thres_hybrid*THREADSY/2; 
+//    int thresTHREADSXhalf =thres_hybrid*THREADSX/2; 
+//
+//    int counter=0;
+//    for (idy = 0; idy < thresTHREADSYhalf ; idy++){
+//        for (idx = idy; idx < nd; idx++){
+//            counter=counter+1;
+//        }
+//    }
+//    for (idx = half_nd; idx < half_nd + thresTHREADSXhalf; idx += 1){
+//        for (idy = thresTHREADSYhalf; idy < idx; idy += 1){
+//            counter=counter+1;
+//        }
+//    }
+//    for (idy = half_nd; idy < half_nd + thresTHREADSYhalf; idy += 1){
+//        for (idx = half_nd + thresTHREADSXhalf; idx < nd ; idx += 1){
+//            counter=counter+1;
+//        }
+//    }
+//
+//    //printf("counter=%u\n",counter);
+//    int indexesIDX[counter];
+//    int indexesIDY[counter];
+//    //printf("after counter=%u\n",counter);
+//
+//    counter=0;
+//    for (idy = 0; idy < thresTHREADSYhalf ; idy++){
+//        for (idx = idy; idx < nd; idx++){
+//            //printf("idx=%d, idy=%d, counter=%u\n",idx,idy,counter);
+//            indexesIDX[counter]=idx;
+//            indexesIDY[counter]=idy;
+//            counter=counter+1;
+//        }
+//    }
+//    for (idx = half_nd; idx < half_nd + thresTHREADSXhalf; idx += 1){
+//        for (idy = thresTHREADSYhalf; idy < idx; idy += 1){
+//            indexesIDX[counter]=idx;
+//            indexesIDY[counter]=idy;
+//            counter=counter+1;
+//        }
+//    }
+//    for (idy = half_nd; idy < half_nd + thresTHREADSYhalf; idy += 1){
+//        for (idx = half_nd + thresTHREADSXhalf; idx < nd ; idx += 1){
+//            indexesIDX[counter]=idx;
+//            indexesIDY[counter]=idy;
+//            counter=counter+1;
+//        }
+//    }    
+
+
+
+//#pragma omp parallel default(none) shared(d_x,d_y,d_z,buffer,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,d_csatol,d_csdtol,d_bandwh,d_bandwd,d_atol,d_ivtype,d_ivtail,d_ivhead,d_vr,thres_hybrid,xlaginv,half_nd,indexesIDX,indexesIDY,counter) private(idy,idx,jj,ii,thresTHREADSXhalf,thresTHREADSYhalf)
+#pragma omp parallel default(none) shared(d_x,d_y,d_z,buffer,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,d_csatol,d_csdtol,d_bandwh,d_bandwd,d_atol,d_ivtype,d_ivtail,d_ivhead,d_vr,thres_hybrid,xlaginv,half_nd) private(idy,idx,jj,ii)
 {
-    threadId=omp_get_thread_num();
+    int threadId=omp_get_thread_num();
+    int countPairs=0;
+    int thresTHREADSYhalf =thres_hybrid*THREADSY/2; 
+    int thresTHREADSXhalf =thres_hybrid*THREADSX/2; 
+    printf("thresTHREADSYhalf=%d\n",thresTHREADSYhalf);
+    printf("thresTHREADSXhalf=%d\n",thresTHREADSXhalf);
+    printf("nd=%d\n",nd);
 
-    //for(idy=0;idy<blocksy;idy++){
-    //for(idx=0;idx<thres_hybrid;idx++){
-    #pragma omp for schedule(guided) 
-    for (idy = 0; idy < thresTHREADSYhalf ; idy++){
-        for (idx = idy; idx < nd; idx++){
-    computeVariogramOMP(idx,idy,nd,irepo,maxdat,MAXVAR,
-        d_x,d_y,d_z,
-        EPSLON,nlag,xlag,xltol,
-        mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
-        dismxs,tmax,tmin,ndir,nvarg,
-        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
-        d_csatol, d_csdtol, d_bandwh, d_bandwd,
-        d_atol,
-        d_ivtype, d_ivtail, d_ivhead,
-        d_vr,threadId,xlaginv);
-    }
+    float sh_np_loc[mxdlv];
+    float sh_dis_loc[mxdlv]; 
+    float sh_gam_loc[mxdlv]; 
+    float sh_hm_loc[mxdlv]; 
+    float sh_tm_loc[mxdlv]; 
+
+    for(jj=0;jj<mxdlv;jj++){
+        sh_np_loc[jj]=0.0;
+        sh_dis_loc[jj]=0.0;
+        sh_tm_loc[jj]=0.0;
+        sh_hm_loc[jj]=0.0;
+        sh_gam_loc[jj]=0.0;
     }
 
-//    #pragma omp for collapse(2) 
-//    for (idx = thresTHREADSXhalf; idx < nd; idx += 1){
-//        for (idy = 0; idy < thresTHREADSYhalf; idy += 1){
-//    computeVariogramOMP(idy,idx,nd,irepo,maxdat,MAXVAR,
+
+//    #pragma omp for schedule(static) 
+//    for (ii = 0; ii < counter ; ii=ii+1){
+//    computeVariogramOMP(indexesIDX[ii],indexesIDY[ii],nd,irepo,maxdat,MAXVAR,
 //        d_x,d_y,d_z,
 //        EPSLON,nlag,xlag,xltol,
-//        mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
+//        mxdlv,sh_np_loc,sh_dis_loc,sh_tm_loc,sh_hm_loc,sh_gam_loc,
+//        //mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
 //        dismxs,tmax,tmin,ndir,nvarg,
 //        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
 //        d_csatol, d_csdtol, d_bandwh, d_bandwd,
 //        d_atol,
 //        d_ivtype, d_ivtail, d_ivhead,
-//        d_vr,threadId,xlaginv);
-//    }
+//        d_vr,0,xlaginv);
+//        //d_vr,threadId,xlaginv);
 //    }
 
-    #pragma omp for schedule(guided)  
-    for (idx = half_nd; idx < half_nd + thresTHREADSXhalf; idx += 1){
-        for (idy = thresTHREADSYhalf; idy < idx; idy += 1){
-    //printf("Entro loop 2\n");
-    computeVariogramOMP(idx,idy,nd,irepo,maxdat,MAXVAR,
-        d_x,d_y,d_z,
-        EPSLON,nlag,xlag,xltol,
-        mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
-        dismxs,tmax,tmin,ndir,nvarg,
-        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
-        d_csatol, d_csdtol, d_bandwh, d_bandwd,
-        d_atol,
-        d_ivtype, d_ivtail, d_ivhead,
-        d_vr,threadId,xlaginv);
-    }
-    }
 
-//    #pragma omp for collapse(2) 
-//    for (idy = half_nd; idy < half_nd + thresTHREADSYhalf ; idy += 1){
-//        for (idx = idy; idx < half_nd + thresTHREADSXhalf; idx += 1){
-//    computeVariogramOMP(idy,idx,nd,irepo,maxdat,MAXVAR,
+
+
+
+
+//    //for(idy=0;idy<blocksy;idy++){
+//    //for(idx=0;idx<thres_hybrid;idx++){
+//    #pragma omp for schedule(static) 
+//    for (idy = 0; idy < thresTHREADSYhalf ; idy++){
+//        for (idx = idy; idx < nd; idx++){
+//    countPairs++;
+//    computeVariogramOMP(idx,idy,nd,irepo,maxdat,MAXVAR,
 //        d_x,d_y,d_z,
 //        EPSLON,nlag,xlag,xltol,
-//        mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
+//        mxdlv,sh_np_loc,sh_dis_loc,sh_tm_loc,sh_hm_loc,sh_gam_loc,
+//        //mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
 //        dismxs,tmax,tmin,ndir,nvarg,
 //        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
 //        d_csatol, d_csdtol, d_bandwh, d_bandwd,
 //        d_atol,
 //        d_ivtype, d_ivtail, d_ivhead,
-//        d_vr,threadId,xlaginv);
+//        d_vr,0,xlaginv);
+//        //d_vr,threadId,xlaginv);
 //    }
 //    }
+//
+////    #pragma omp for collapse(2) 
+////    for (idx = thresTHREADSXhalf; idx < nd; idx += 1){
+////        for (idy = 0; idy < thresTHREADSYhalf; idy += 1){
+////    computeVariogramOMP(idy,idx,nd,irepo,maxdat,MAXVAR,
+////        d_x,d_y,d_z,
+////        EPSLON,nlag,xlag,xltol,
+////        mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
+////        dismxs,tmax,tmin,ndir,nvarg,
+////        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
+////        d_csatol, d_csdtol, d_bandwh, d_bandwd,
+////        d_atol,
+////        d_ivtype, d_ivtail, d_ivhead,
+////        d_vr,threadId,xlaginv);
+////    }
+////    }
+//
+//    #pragma omp for schedule(static) 
+//    for (idx = half_nd; idx < half_nd + thresTHREADSXhalf; idx += 1){
+//        for (idy = thresTHREADSYhalf; idy < idx; idy += 1){
+//    //printf("Entro loop 2\n");
+//    countPairs++;
+//    computeVariogramOMP(idx,idy,nd,irepo,maxdat,MAXVAR,
+//        d_x,d_y,d_z,
+//        EPSLON,nlag,xlag,xltol,
+//        //mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
+//        mxdlv,sh_np_loc,sh_dis_loc,sh_tm_loc,sh_hm_loc,sh_gam_loc,
+//        dismxs,tmax,tmin,ndir,nvarg,
+//        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
+//        d_csatol, d_csdtol, d_bandwh, d_bandwd,
+//        d_atol,
+//        d_ivtype, d_ivtail, d_ivhead,
+//        d_vr,0,xlaginv);
+//        //d_vr,threadId,xlaginv);
+//    }
+//    }
+//
+////    #pragma omp for collapse(2) 
+////    for (idy = half_nd; idy < half_nd + thresTHREADSYhalf ; idy += 1){
+////        for (idx = idy; idx < half_nd + thresTHREADSXhalf; idx += 1){
+////    computeVariogramOMP(idy,idx,nd,irepo,maxdat,MAXVAR,
+////        d_x,d_y,d_z,
+////        EPSLON,nlag,xlag,xltol,
+////        mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
+////        dismxs,tmax,tmin,ndir,nvarg,
+////        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
+////        d_csatol, d_csdtol, d_bandwh, d_bandwd,
+////        d_atol,
+////        d_ivtype, d_ivtail, d_ivhead,
+////        d_vr,threadId,xlaginv);
+////    }
+////    }
+//
+//    #pragma omp for schedule(static) 
+//    for (idy = half_nd; idy < half_nd + thresTHREADSYhalf; idy += 1){
+//        for (idx = half_nd + thresTHREADSXhalf; idx < nd ; idx += 1){
+//    //printf("Entro loop 3\n");
+//    countPairs++;
+//    computeVariogramOMP(idx,idy,nd,irepo,maxdat,MAXVAR,
+//        d_x,d_y,d_z,
+//        EPSLON,nlag,xlag,xltol,
+//        //mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
+//        mxdlv,sh_np_loc,sh_dis_loc,sh_tm_loc,sh_hm_loc,sh_gam_loc,
+//        dismxs,tmax,tmin,ndir,nvarg,
+//        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
+//        d_csatol, d_csdtol, d_bandwh, d_bandwd,
+//        d_atol,
+//        d_ivtype, d_ivtail, d_ivhead,
+//        d_vr,0,xlaginv);
+//        //d_vr,threadId,xlaginv);
+//    }
+//    }
+//
+//
+//    //for(ii=0;ii<num_threads;ii++){
+//    for(jj=0;jj<mxdlv;jj++){
+//        sh_np[jj+threadId*mxdlv]	=sh_np_loc[jj];;
+//        sh_dis[jj+threadId*mxdlv]	=sh_dis_loc[jj];
+//        sh_tm[jj+threadId*mxdlv]	=sh_tm_loc[jj];
+//        sh_hm[jj+threadId*mxdlv]	=sh_hm_loc[jj];
+//        sh_gam[jj+threadId*mxdlv]	=sh_gam_loc[jj];
+//    }
+//    //}
 
-    #pragma omp for schedule(guided)  
-    for (idy = half_nd; idy < half_nd + thresTHREADSYhalf; idy += 1){
-        for (idx = half_nd + thresTHREADSXhalf; idx < nd ; idx += 1){
-    //printf("Entro loop 3\n");
-    computeVariogramOMP(idx,idy,nd,irepo,maxdat,MAXVAR,
-        d_x,d_y,d_z,
-        EPSLON,nlag,xlag,xltol,
-        mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
-        dismxs,tmax,tmin,ndir,nvarg,
-        d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
-        d_csatol, d_csdtol, d_bandwh, d_bandwd,
-        d_atol,
-        d_ivtype, d_ivtail, d_ivhead,
-        d_vr,threadId,xlaginv);
-    }
-    }
-
+    printf("countPairs=%d\n",countPairs);
 }
-
     //__syncthreads();
 
-	for(threadId=0;threadId<num_threads;threadId++){
+
+        int threadIdX=0;
+	for(threadIdX=0;threadIdX<num_threads;threadIdX++){
 	for(ii=0;ii<mxdlv;ii++){
-		h_np[ii]+=sh_np[ii+threadId*mxdlv];
-		h_dis[ii]+=sh_dis[ii+threadId*mxdlv];
-		h_tm[ii]+=sh_tm[ii+threadId*mxdlv];
-		h_hm[ii]+=sh_hm[ii+threadId*mxdlv];
-		h_gam[ii]+=sh_gam[ii+threadId*mxdlv];
+		h_np[ii]+=sh_np[ii+threadIdX*mxdlv];
+		h_dis[ii]+=sh_dis[ii+threadIdX*mxdlv];
+		h_tm[ii]+=sh_tm[ii+threadIdX*mxdlv];
+		h_hm[ii]+=sh_hm[ii+threadIdX*mxdlv];
+		h_gam[ii]+=sh_gam[ii+threadIdX*mxdlv];
 	}
 	}
 
-
+//	free(indexes);
 
 //    if (threadId < mxdlv){
 //
@@ -1224,9 +1338,11 @@ extern "C" int extractstatisticscudaompwrapper_(
 	cudaStreamCreate(&streamid);
 
 	// CUDA kernel will process the first half of the data.
-	float thres_factor = 1.0f;
-	int thres_hybrid = (int)(thres_factor*(float)(*maxdat/THREADSX));
-	
+	//float thres_factor = 1.0f;
+	int thres_factor = 1;
+	//int thres_hybrid = (int)(thres_factor*(float)(*maxdat/THREADSX));
+	int thres_hybrid = ((*maxdat)/THREADSX)/thres_factor;
+	printf("thres_hybrid=%d\n",thres_hybrid);	
 
 
 
