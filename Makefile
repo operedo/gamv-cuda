@@ -10,7 +10,7 @@ NVCC=nvcc
 FFLAGS= -cpp -O3 
 CFLAGS= -O3 
 #NVFLAGS= -ccbin=/Soft/gcc/4.7.2/bin/gcc -m64 -c -O3 -arch=sm_35
-NVFLAGS= -m64 -c -O3 -arch=sm_35
+NVFLAGS= -m64 -c -O3 -arch=sm_37
 
 #OPENMP=-fopenmp
 #INCS= -I.
