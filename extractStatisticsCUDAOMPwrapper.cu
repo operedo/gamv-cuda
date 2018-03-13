@@ -437,19 +437,12 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
 						//sh_tm[ii + mxdlv*sh_pos]+=(vrt);
 						//sh_hm[ii + mxdlv*sh_pos]+=(vrh);
 						//sh_gam[ii + mxdlv*sh_pos]+=((vrh-vrt)*(vrh-vrt));
-						sh_np[ii]+=1.0;
-						sh_dis[ii]+=(h);
-						sh_tm[ii]+=(vrt);
-						sh_hm[ii]+=(vrh);
-						sh_gam[ii]+=((vrh-vrt)*(vrh-vrt));
 
-
-
-                                            //atomicAdd(&sh_np[ii + mxdlv*sh_pos],1.0);
-                                            //atomicAdd(&sh_dis[ii + mxdlv*sh_pos],(h));
-                                            //atomicAdd(&sh_tm[ii + mxdlv*sh_pos],(vrt));
-                                            //atomicAdd(&sh_hm[ii + mxdlv*sh_pos],(vrh));
-                                            //atomicAdd(&sh_gam[ii + mxdlv*sh_pos],((vrh-vrt)*(vrh-vrt)));
+//						sh_np[ii]+=1.0;
+//						sh_dis[ii]+=(h);
+//						sh_tm[ii]+=(vrt);
+//						sh_hm[ii]+=(vrh);
+//						sh_gam[ii]+=((vrh-vrt)*(vrh-vrt));
 
                                             if(omni){
                                                 if(vrtpr>=tmin && vrhpr>=tmin && vrtpr<tmax && vrhpr<tmax){
@@ -459,19 +452,12 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
 						//sh_tm[ii + mxdlv*sh_pos]+=(vrtpr);
 						//sh_hm[ii + mxdlv*sh_pos]+=(vrhpr);
 						//sh_gam[ii + mxdlv*sh_pos]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
-						sh_np[ii ]+=1.0;
-						sh_dis[ii]+=(h);
-						sh_tm[ii ]+=(vrtpr);
-						sh_hm[ii ]+=(vrhpr);
-						sh_gam[ii]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
 
-
-
-                                                    //atomicAdd(&sh_np[ii + mxdlv*sh_pos],1.0);
-                                                    //atomicAdd(&sh_dis[ii + mxdlv*sh_pos],(h));
-                                                    //atomicAdd(&sh_tm[ii + mxdlv*sh_pos],(vrtpr));
-                                                    //atomicAdd(&sh_hm[ii + mxdlv*sh_pos],(vrhpr));
-                                                    //atomicAdd(&sh_gam[ii + mxdlv*sh_pos],((vrhpr-vrtpr)*(vrhpr-vrtpr)));
+//						sh_np[ii ]+=1.0;
+//						sh_dis[ii]+=(h);
+//						sh_tm[ii ]+=(vrtpr);
+//						sh_hm[ii ]+=(vrhpr);
+//						sh_gam[ii]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
 
                                                 }
                                             }
@@ -483,18 +469,11 @@ __host__ void computeVariogramOMP(int i, int  j,const int nd, const int irepo, c
                                     else if(it==2){
                                         for(il=lagbeg;il<=lagend;il++){
                                             ii = (id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2)+il -1;
-						sh_np[ii + mxdlv*sh_pos]+=1.0;
-						sh_dis[ii + mxdlv*sh_pos]+=(h);
-						sh_tm[ii + mxdlv*sh_pos]+=(0.5*(vrt+vrtpr));
-						sh_hm[ii + mxdlv*sh_pos]+=(0.5*(vrh+vrhpr));
-						sh_gam[ii + mxdlv*sh_pos]+=((vrhpr-vrh)*(vrt-vrtpr));
-
-
-                                            //atomicAdd(&sh_np[ii + mxdlv*sh_pos],1.0);
-                                            //atomicAdd(&sh_dis[ii + mxdlv*sh_pos],(h));
-                                            //atomicAdd(&sh_tm[ii + mxdlv*sh_pos],(0.5*(vrt+vrtpr)));
-                                            //atomicAdd(&sh_hm[ii + mxdlv*sh_pos],(0.5*(vrh+vrhpr)));
-                                            //atomicAdd(&sh_gam[ii + mxdlv*sh_pos],((vrhpr-vrh)*(vrt-vrtpr)));
+						sh_np[ii ]+=1.0;
+						sh_dis[ii]+=(h);
+						sh_tm[ii ]+=(0.5*(vrt+vrtpr));
+						sh_hm[ii ]+=(0.5*(vrh+vrhpr));
+						sh_gam[ii]+=((vrhpr-vrh)*(vrt-vrtpr));
 
                                         }
                                     }
@@ -1447,9 +1426,9 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
     int countPairs=0;
     int thresTHREADSYhalf =thres_hybrid*THREADSY/2; 
     int thresTHREADSXhalf =thres_hybrid*THREADSX/2; 
-    printf("thresTHREADSYhalf=%d\n",thresTHREADSYhalf);
-    printf("thresTHREADSXhalf=%d\n",thresTHREADSXhalf);
-    printf("nd=%d\n",nd);
+//    printf("thresTHREADSYhalf=%d\n",thresTHREADSYhalf);
+//    printf("thresTHREADSXhalf=%d\n",thresTHREADSXhalf);
+//    printf("nd=%d\n",nd);
 
     float sh_np_loc[mxdlv];
     float sh_dis_loc[mxdlv]; 
@@ -1466,7 +1445,7 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
     }
 
 
-    #pragma omp for schedule(runtime) 
+    #pragma omp for schedule(runtime) nowait
     for (idx = 0 ; idx < nd; idx++){
         int mm = MIN(idx,thres_hybrid);
         for (idy = 0; idy < mm ; idy++){
@@ -1499,7 +1478,7 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
     }
     //}
 
-    printf("countPairs=%d\n",countPairs);
+    //printf("countPairs=%d\n",countPairs);
 }
 
 
@@ -1566,7 +1545,7 @@ extern "C" int extractstatisticscudaompwrapper_(
 	cudaStreamCreate(&streamid);
 
 	// CUDA kernel will process the first half of the data.
-	float thres_factor = 0.001f;
+	float thres_factor = (float)THRES;
 	//int thres_factor = 2;
 	//int thres_hybrid = (int)(thres_factor*(float)(*maxdat/THREADSX));
 	int thres_hybrid = (int)ceil(((*maxdat)/THREADSX)*thres_factor);
@@ -1578,276 +1557,276 @@ extern "C" int extractstatisticscudaompwrapper_(
     	dim3 threads(THREADSX,THREADSY,1);
 	int frac_nd;
 
-    	int chunk_sh_mem = 4;
-	h_np = (DT*)malloc(sizeof(DT)* *mxdlv);
-	h_dis = (DT*)malloc(sizeof(DT)* *mxdlv);
-	h_gam = (DT*)malloc(sizeof(DT)* *mxdlv);
-	h_hm = (DT*)malloc(sizeof(DT)* *mxdlv);
-	h_tm = (DT*)malloc(sizeof(DT)* *mxdlv);
-	hh_np = (DT*)malloc(sizeof(DT)* *mxdlv);
-	hh_dis = (DT*)malloc(sizeof(DT)* *mxdlv);
-	hh_gam = (DT*)malloc(sizeof(DT)* *mxdlv);
-	hh_hm = (DT*)malloc(sizeof(DT)* *mxdlv);
-	hh_tm = (DT*)malloc(sizeof(DT)* *mxdlv);
-
-
-	int shared_mem_size;
-    	int i;
-    	for (i = 0; i < *mxdlv; i++){
-        	h_np[i] = 0.0;
-        	h_dis[i] = 0.0;
-        	h_gam[i] = 0.0;
-        	h_hm[i] = 0.0;
-        	h_tm[i] = 0.0;
-        	hh_np[i] = 0.0;
-        	hh_dis[i] = 0.0;
-        	hh_gam[i] = 0.0;
-        	hh_hm[i] = 0.0;
-        	hh_tm[i] = 0.0;
-    	}
-   	cudaMalloc( (void **)&d_x, sizeof(float) * (*maxdat) );
-   	//Check_CUDA_Error("malloc coord");
-   	cudaMalloc( (void **)&d_y, sizeof(float) * (*maxdat) );
-   	//Check_CUDA_Error("malloc coord");
-   	cudaMalloc( (void **)&d_z, sizeof(float) * (*maxdat) );
-   	//Check_CUDA_Error("malloc coord");
-   	cudaMalloc( (void **)&d_np, sizeof(DT) * (*mxdlv) );
-   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-   	cudaMalloc( (void **)&d_dis, sizeof(DT) * (*mxdlv) );
-   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-   	cudaMalloc( (void **)&d_gam, sizeof(DT) * (*mxdlv) );
-   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-   	cudaMalloc( (void **)&d_hm, sizeof(DT) * (*mxdlv) );
-   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-   	cudaMalloc( (void **)&d_tm, sizeof(DT) * (*mxdlv) );
-   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
-   	cudaMalloc( (void **)&d_uvxazm, sizeof(float) * (100) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_uvyazm, sizeof(float) * (100) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_uvzdec, sizeof(float) * (100) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_uvhdec, sizeof(float) * (100) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_csatol, sizeof(float) * (100) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_csdtol, sizeof(float) * (100) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_bandwh, sizeof(float) * (*ndir) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_bandwd, sizeof(float) * (*ndir) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_atol, sizeof(float) * (*ndir) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_vr, sizeof(float) * (*maxdat* *MAXVAR) );
-   	//Check_CUDA_Error("small mallocs ");
-   	cudaMalloc( (void **)&d_ivtype, sizeof(float) * (*nvarg) );
-   	//Check_CUDA_Error("iv mallocs");
-   	cudaMalloc( (void **)&d_ivtail, sizeof(float) * (*nvarg) );
-   	//Check_CUDA_Error("iv mallocs");
-   	cudaMalloc( (void **)&d_ivhead, sizeof(float) * (*nvarg) );
-   	//Check_CUDA_Error("iv mallocs");
-   	cudaMemcpyAsync( d_x, x,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy coords h -> d");
-   	cudaMemcpyAsync( d_y, y,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy coords h -> d");
-   	cudaMemcpyAsync( d_z, z,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy coords h -> d");
-   	cudaMemcpyAsync( d_np, h_np,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-   	cudaMemcpyAsync( d_dis, h_dis,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-   	cudaMemcpyAsync( d_gam, h_gam,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-   	cudaMemcpyAsync( d_hm, h_hm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-   	cudaMemcpyAsync( d_tm, h_tm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
-   	cudaMemcpyAsync( d_uvxazm, uvxazm,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_uvyazm, uvyazm,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_uvzdec, uvzdec,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_uvhdec, uvhdec,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_csatol, csatol,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_csdtol, csdtol,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_bandwh, bandwh,sizeof(float) * (*ndir), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_bandwd, bandwd,sizeof(float) * (*ndir), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_atol, atol,sizeof(float) * (*ndir), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_vr, vr,sizeof(float) * (*maxdat* *MAXVAR), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy small data h -> d");
-   	cudaMemcpyAsync( d_ivtype, ivtype,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy iv var h -> d");
-   	cudaMemcpyAsync( d_ivtail, ivtail,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy iv var h -> d");
-   	cudaMemcpyAsync( d_ivhead, ivhead,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice , streamid);
-   	//Check_CUDA_Error("cpy iv var h -> d");
-   	cudaEvent_t start, stop;
-   	float time;
-
-
-	//int num_devices;
-	//cudaGetDeviceCount(&num_devices);
-	//printf("num_devices=%d\n",num_devices);
-
-
-
-	frac_nd = *maxdat/THREADSX;
-       	dim3 blocks( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
-       	cudaEventCreate(&start);
-       	cudaEventCreate(&stop);
-       	cudaEventRecord(start, streamid);
-    	if (MEM_OPTIMIZED){
-       		shared_mem_size = sizeof(DT)*(*mxdlv*5*chunk_sh_mem);
-		printf("Starting asynchronous CUDA kernel (mem-opt)...\n");
-        	variogramKernelMemoryOptimized<<< blocks, threads,shared_mem_size,streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
-                                            d_x,d_y,d_z,
-                                            *EPSLON,
-                                            *nlag,
-                                            *xlag,*xltol,
-                                            *mxdlv,
-                                            d_np,d_dis,d_gam,d_hm,d_tm,
-                                            *dismxs,*tmax,*tmin,
-                                            *ndir,*nvarg,
-                                            d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
-                                            d_csatol,d_csdtol,d_bandwh,d_bandwd,
-                                            d_atol,
-                                            d_ivtype,d_ivtail,d_ivhead,
-                                            d_vr,chunk_sh_mem,frac_nd,thres_hybrid);
-        	//cudaDeviceSynchronize();
-    	}else{
-        	shared_mem_size = sizeof(DT)*(*mxdlv*5);
-		printf("Starting asynchronous CUDA kernel...\n");
-        	//variogramKernel<<< blocks, threads,shared_mem_size, streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
-		frac_nd = (*maxdat-thres_hybrid2)/THREADSX;
-       		dim3 blocks2( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
-        	variogramKernelShrinked<<< blocks2, threads,shared_mem_size, streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
-                                            d_x,d_y,d_z,
-                                            *EPSLON,
-                                            *nlag,
-                                            *xlag,*xltol,
-                                            *mxdlv,
-                                            d_np,d_dis,d_gam,d_hm,d_tm,
-                                            *dismxs,*tmax,*tmin,
-                                            *ndir,*nvarg,
-                                            d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
-                                            d_csatol,d_csdtol,d_bandwh,d_bandwd,
-                                            d_atol,
-                                            d_ivtype,d_ivtail,d_ivhead,
-                                            d_vr,frac_nd,thres_hybrid);
-	
-     
-
-		//cudaDeviceSynchronize();
-    	}
-       	Check_CUDA_Error("fitness kernel");
-       	cudaEventRecord(stop, streamid);
-       	cudaEventSynchronize(stop);
-       	cudaEventElapsedTime(&time, start, stop);
-	printf ("Time for the Optimized kernel: %f ms\n", time);
-       	printf ("GPU time: %f\n", time/1000);
-       	printf("------------------------------\n");
-
-
-
-	//variogramKernelOMP(*nd,*irepo,*maxdat,*MAXVAR,
-	frac_nd = (*maxdat)/THREADSX;
-	variogramKernelOMPOptimizedShrinked(*nd,*irepo,*maxdat,*MAXVAR,
-                                    x,y,z,
-                                    *EPSLON,
-                                    *nlag,
-                                    *xlag,*xltol,
-                                    *mxdlv,
-                                    hh_np,hh_dis,hh_gam,hh_hm,hh_tm,
-                                    *dismxs,*tmax,*tmin,
-                                    *ndir,*nvarg,
-                                    uvxazm,uvyazm,uvzdec,uvhdec,
-                                    csatol,csdtol,bandwh,bandwd,
-                                    atol,
-                                    ivtype,ivtail,ivhead,
-                                    vr,frac_nd,thres_hybrid2);
- 
-
-
-
-	//cudaStreamSynchronize(0);
-
-       	cudaStreamSynchronize(streamid);
-
-    	cudaMemcpyAsync( h_np, d_np,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
-    	//Check_CUDA_Error("cpy d -> h");
-    	cudaMemcpyAsync( h_dis, d_dis,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
-    	//Check_CUDA_Error("cpy d -> h");
-    	cudaMemcpyAsync( h_gam, d_gam,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
-    	//Check_CUDA_Error("cpy d -> h");
-    	cudaMemcpyAsync( h_hm, d_hm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
-    	//Check_CUDA_Error("cpy d -> h");
-    	cudaMemcpyAsync( h_tm, d_tm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
-    	//Check_CUDA_Error("cpy d -> h");
-
-   	// printf("np, dis, gam, hm, tm\n");
-	//    float sum_np = 0.0;
- 
-	cudaStreamDestroy(streamid);
-
-
-   	for (i = 0; i < *mxdlv; i++){
-        	np[i] = (double)h_np[i];
-        	dis[i] = (double)h_dis[i];
-        	gam[i] = (double)h_gam[i];
-        	hm[i] = (double)h_hm[i];
-        	tm[i] = (double)h_tm[i];
-      	//  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
-    	}
-   	for (i = 0; i < *mxdlv; i++){
-        	np[i] += (double)hh_np[i];
-        	dis[i] += (double)hh_dis[i];
-        	gam[i] += (double)hh_gam[i];
-        	hm[i] += (double)hh_hm[i];
-        	tm[i] += (double)hh_tm[i];
-      	//  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
-    	}
-
-
-
-    	cudaFree(d_x);
-    	cudaFree(d_y);
-    	cudaFree(d_z);
-    	cudaFree(d_np);
-    	cudaFree(d_dis);
-    	cudaFree(d_gam);
-    	cudaFree(d_hm);
-    	cudaFree(d_tm);
-    	cudaFree(d_uvxazm);
-    	cudaFree(d_uvyazm);
-    	cudaFree(d_uvzdec);
-    	cudaFree(d_uvhdec);
-    	cudaFree(d_csatol);
-    	cudaFree(d_csdtol);
-    	cudaFree(d_bandwh);
-    	cudaFree(d_bandwd);
-    	cudaFree(d_atol);
-    	cudaFree(d_vr);
-    	cudaFree(d_ivtype);
-    	cudaFree(d_ivtail);
-    	cudaFree(d_ivhead);
-    	free(h_np);
-    	free(h_dis);
-    	free(h_gam);
-    	free(h_hm);
-    	free(h_tm);
-    	free(hh_np);
-    	free(hh_dis);
-    	free(hh_gam);
-    	free(hh_hm);
-    	free(hh_tm);
+//    	int chunk_sh_mem = 4;
+//	h_np = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	h_dis = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	h_gam = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	h_hm = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	h_tm = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	hh_np = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	hh_dis = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	hh_gam = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	hh_hm = (DT*)malloc(sizeof(DT)* *mxdlv);
+//	hh_tm = (DT*)malloc(sizeof(DT)* *mxdlv);
+//
+//
+//	int shared_mem_size;
+//    	int i;
+//    	for (i = 0; i < *mxdlv; i++){
+//        	h_np[i] = 0.0;
+//        	h_dis[i] = 0.0;
+//        	h_gam[i] = 0.0;
+//        	h_hm[i] = 0.0;
+//        	h_tm[i] = 0.0;
+//        	hh_np[i] = 0.0;
+//        	hh_dis[i] = 0.0;
+//        	hh_gam[i] = 0.0;
+//        	hh_hm[i] = 0.0;
+//        	hh_tm[i] = 0.0;
+//    	}
+//   	cudaMalloc( (void **)&d_x, sizeof(float) * (*maxdat) );
+//   	//Check_CUDA_Error("malloc coord");
+//   	cudaMalloc( (void **)&d_y, sizeof(float) * (*maxdat) );
+//   	//Check_CUDA_Error("malloc coord");
+//   	cudaMalloc( (void **)&d_z, sizeof(float) * (*maxdat) );
+//   	//Check_CUDA_Error("malloc coord");
+//   	cudaMalloc( (void **)&d_np, sizeof(DT) * (*mxdlv) );
+//   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+//   	cudaMalloc( (void **)&d_dis, sizeof(DT) * (*mxdlv) );
+//   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+//   	cudaMalloc( (void **)&d_gam, sizeof(DT) * (*mxdlv) );
+//   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+//   	cudaMalloc( (void **)&d_hm, sizeof(DT) * (*mxdlv) );
+//   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+//   	cudaMalloc( (void **)&d_tm, sizeof(DT) * (*mxdlv) );
+//   	//Check_CUDA_Error("malloc np, dis, gam, hm, tm");
+//   	cudaMalloc( (void **)&d_uvxazm, sizeof(float) * (100) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_uvyazm, sizeof(float) * (100) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_uvzdec, sizeof(float) * (100) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_uvhdec, sizeof(float) * (100) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_csatol, sizeof(float) * (100) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_csdtol, sizeof(float) * (100) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_bandwh, sizeof(float) * (*ndir) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_bandwd, sizeof(float) * (*ndir) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_atol, sizeof(float) * (*ndir) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_vr, sizeof(float) * (*maxdat* *MAXVAR) );
+//   	//Check_CUDA_Error("small mallocs ");
+//   	cudaMalloc( (void **)&d_ivtype, sizeof(float) * (*nvarg) );
+//   	//Check_CUDA_Error("iv mallocs");
+//   	cudaMalloc( (void **)&d_ivtail, sizeof(float) * (*nvarg) );
+//   	//Check_CUDA_Error("iv mallocs");
+//   	cudaMalloc( (void **)&d_ivhead, sizeof(float) * (*nvarg) );
+//   	//Check_CUDA_Error("iv mallocs");
+//   	cudaMemcpyAsync( d_x, x,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy coords h -> d");
+//   	cudaMemcpyAsync( d_y, y,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy coords h -> d");
+//   	cudaMemcpyAsync( d_z, z,sizeof(float) * (*maxdat), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy coords h -> d");
+//   	cudaMemcpyAsync( d_np, h_np,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+//   	cudaMemcpyAsync( d_dis, h_dis,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+//   	cudaMemcpyAsync( d_gam, h_gam,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+//   	cudaMemcpyAsync( d_hm, h_hm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+//   	cudaMemcpyAsync( d_tm, h_tm,sizeof(DT) * (*mxdlv), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy np, dis, gam, hm, tm h -> d");
+//   	cudaMemcpyAsync( d_uvxazm, uvxazm,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_uvyazm, uvyazm,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_uvzdec, uvzdec,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_uvhdec, uvhdec,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_csatol, csatol,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_csdtol, csdtol,sizeof(float) * (100), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_bandwh, bandwh,sizeof(float) * (*ndir), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_bandwd, bandwd,sizeof(float) * (*ndir), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_atol, atol,sizeof(float) * (*ndir), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_vr, vr,sizeof(float) * (*maxdat* *MAXVAR), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy small data h -> d");
+//   	cudaMemcpyAsync( d_ivtype, ivtype,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy iv var h -> d");
+//   	cudaMemcpyAsync( d_ivtail, ivtail,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy iv var h -> d");
+//   	cudaMemcpyAsync( d_ivhead, ivhead,sizeof(float) * (*nvarg), cudaMemcpyHostToDevice , streamid);
+//   	//Check_CUDA_Error("cpy iv var h -> d");
+//   	cudaEvent_t start, stop;
+//   	float time;
+//
+//
+//	//int num_devices;
+//	//cudaGetDeviceCount(&num_devices);
+//	//printf("num_devices=%d\n",num_devices);
+//
+//
+//
+//	frac_nd = *maxdat/THREADSX;
+//       	dim3 blocks( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
+//       	cudaEventCreate(&start);
+//       	cudaEventCreate(&stop);
+//       	cudaEventRecord(start, streamid);
+//    	if (MEM_OPTIMIZED){
+//       		shared_mem_size = sizeof(DT)*(*mxdlv*5*chunk_sh_mem);
+//		printf("Starting asynchronous CUDA kernel (mem-opt)...\n");
+//        	variogramKernelMemoryOptimized<<< blocks, threads,shared_mem_size,streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
+//                                            d_x,d_y,d_z,
+//                                            *EPSLON,
+//                                            *nlag,
+//                                            *xlag,*xltol,
+//                                            *mxdlv,
+//                                            d_np,d_dis,d_gam,d_hm,d_tm,
+//                                            *dismxs,*tmax,*tmin,
+//                                            *ndir,*nvarg,
+//                                            d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
+//                                            d_csatol,d_csdtol,d_bandwh,d_bandwd,
+//                                            d_atol,
+//                                            d_ivtype,d_ivtail,d_ivhead,
+//                                            d_vr,chunk_sh_mem,frac_nd,thres_hybrid);
+//        	//cudaDeviceSynchronize();
+//    	}else{
+//        	shared_mem_size = sizeof(DT)*(*mxdlv*5);
+//		printf("Starting asynchronous CUDA kernel...\n");
+//        	//variogramKernel<<< blocks, threads,shared_mem_size, streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
+//		frac_nd = (*maxdat-thres_hybrid2)/THREADSX;
+//       		dim3 blocks2( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
+//        	variogramKernelShrinked<<< blocks2, threads,shared_mem_size, streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
+//                                            d_x,d_y,d_z,
+//                                            *EPSLON,
+//                                            *nlag,
+//                                            *xlag,*xltol,
+//                                            *mxdlv,
+//                                            d_np,d_dis,d_gam,d_hm,d_tm,
+//                                            *dismxs,*tmax,*tmin,
+//                                            *ndir,*nvarg,
+//                                            d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
+//                                            d_csatol,d_csdtol,d_bandwh,d_bandwd,
+//                                            d_atol,
+//                                            d_ivtype,d_ivtail,d_ivhead,
+//                                            d_vr,frac_nd,thres_hybrid);
+//	
+//     
+//
+//		//cudaDeviceSynchronize();
+//    	}
+//       	Check_CUDA_Error("fitness kernel");
+//       	cudaEventRecord(stop, streamid);
+//       	cudaEventSynchronize(stop);
+//       	cudaEventElapsedTime(&time, start, stop);
+//	printf ("Time for the Optimized kernel: %f ms\n", time);
+//       	printf ("GPU time: %f\n", time/1000);
+//       	printf("------------------------------\n");
+//
+//
+//
+//	//variogramKernelOMP(*nd,*irepo,*maxdat,*MAXVAR,
+//	frac_nd = (*maxdat)/THREADSX;
+//	variogramKernelOMPOptimizedShrinked(*nd,*irepo,*maxdat,*MAXVAR,
+//                                    x,y,z,
+//                                    *EPSLON,
+//                                    *nlag,
+//                                    *xlag,*xltol,
+//                                    *mxdlv,
+//                                    hh_np,hh_dis,hh_gam,hh_hm,hh_tm,
+//                                    *dismxs,*tmax,*tmin,
+//                                    *ndir,*nvarg,
+//                                    uvxazm,uvyazm,uvzdec,uvhdec,
+//                                    csatol,csdtol,bandwh,bandwd,
+//                                    atol,
+//                                    ivtype,ivtail,ivhead,
+//                                    vr,frac_nd,thres_hybrid2);
+// 
+//
+//
+//
+//	//cudaStreamSynchronize(0);
+//
+//       	cudaStreamSynchronize(streamid);
+//
+//    	cudaMemcpyAsync( h_np, d_np,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
+//    	//Check_CUDA_Error("cpy d -> h");
+//    	cudaMemcpyAsync( h_dis, d_dis,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
+//    	//Check_CUDA_Error("cpy d -> h");
+//    	cudaMemcpyAsync( h_gam, d_gam,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
+//    	//Check_CUDA_Error("cpy d -> h");
+//    	cudaMemcpyAsync( h_hm, d_hm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
+//    	//Check_CUDA_Error("cpy d -> h");
+//    	cudaMemcpyAsync( h_tm, d_tm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
+//    	//Check_CUDA_Error("cpy d -> h");
+//
+//   	// printf("np, dis, gam, hm, tm\n");
+//	//    float sum_np = 0.0;
+// 
+//	cudaStreamDestroy(streamid);
+//
+//
+//   	for (i = 0; i < *mxdlv; i++){
+//        	np[i] = (double)h_np[i];
+//        	dis[i] = (double)h_dis[i];
+//        	gam[i] = (double)h_gam[i];
+//        	hm[i] = (double)h_hm[i];
+//        	tm[i] = (double)h_tm[i];
+//      	//  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
+//    	}
+//   	for (i = 0; i < *mxdlv; i++){
+//        	np[i] += (double)hh_np[i];
+//        	dis[i] += (double)hh_dis[i];
+//        	gam[i] += (double)hh_gam[i];
+//        	hm[i] += (double)hh_hm[i];
+//        	tm[i] += (double)hh_tm[i];
+//      	//  printf("%lf\t, %lf\t, %lf\t, %lf\t, %lf\n",np[i],dis[i],gam[i],hm[i],tm[i]);
+//    	}
+//
+//
+//
+//    	cudaFree(d_x);
+//    	cudaFree(d_y);
+//    	cudaFree(d_z);
+//    	cudaFree(d_np);
+//    	cudaFree(d_dis);
+//    	cudaFree(d_gam);
+//    	cudaFree(d_hm);
+//    	cudaFree(d_tm);
+//    	cudaFree(d_uvxazm);
+//    	cudaFree(d_uvyazm);
+//    	cudaFree(d_uvzdec);
+//    	cudaFree(d_uvhdec);
+//    	cudaFree(d_csatol);
+//    	cudaFree(d_csdtol);
+//    	cudaFree(d_bandwh);
+//    	cudaFree(d_bandwd);
+//    	cudaFree(d_atol);
+//    	cudaFree(d_vr);
+//    	cudaFree(d_ivtype);
+//    	cudaFree(d_ivtail);
+//    	cudaFree(d_ivhead);
+//    	free(h_np);
+//    	free(h_dis);
+//    	free(h_gam);
+//    	free(h_hm);
+//    	free(h_tm);
+//    	free(hh_np);
+//    	free(hh_dis);
+//    	free(hh_gam);
+//    	free(hh_hm);
+//    	free(hh_tm);
 	return 0;
 //end routine
 }

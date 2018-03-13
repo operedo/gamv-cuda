@@ -5,38 +5,18 @@
 CC=gcc
 FC=gfortran
 NVCC=nvcc
-#FFLAGS= -cpp -Wall -pedantic -O3
 #FFLAGS= -g -cpp -O2 -march=native -ffast-math -ftree-vectorize
 FFLAGS= -cpp -O3 
 CFLAGS= -O3 
 #NVFLAGS= -ccbin=/Soft/gcc/4.7.2/bin/gcc -m64 -c -O3 -arch=sm_35
-NVFLAGS= -m64 -c -O3 -arch=sm_37
+NVFLAGS= -O3 -m64 -c -arch=sm_35 --use_fast_math -DTHRES=${THRES}
 
-#OPENMP=-fopenmp
-#INCS= -I.
-#LIBS= -lgomp -lm
-#else
-#OPENMP=
-#INCS= -I.
-#LIBS= -lm
-#endif
-
-#ifdef CUDA
 OPENMP= -fopenmp
 INCS= -I. 
 NVINCS= -I/usr/local/cuda-8.0/include
-#NVINCS= -I/Soft/cuda/6.5.14/include/
 OPENMPLIBS= -lgomp 
 LIBS= -lstdc++ -lm
-#NVLIBS= -L/usr/local/cuda-6.5/lib64 -lcuda -lcudart /usr/local/cuda-6.5/lib64/libcudadevrt.a
 NVLIBS= -L/usr/local/cuda-8.0/lib64 -lcuda -lcudart 
-#NVLIBS= -L/Soft/cuda/6.5.14/lib64 -lcuda -lcudart 
-#NVLIBS= /Soft/cuda/6.5.14/lib64/libcudart_static.a -L/Soft/cuda/6.5.14/lib64 -lcuda 
-#endif
-
-#FC=ifort
-#FFLAGS=-fpp -O3
-#OPENMP=-openmp
 
 F_OBJECTS= extractStatisticsFortran.o
 C_OBJECTS= extractStatisticsCwrapper.o 

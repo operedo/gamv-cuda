@@ -109,6 +109,8 @@ c writeout variables
       real elapsed(2)
       integer i, j
 
+      init = etime(elapsed)
+
 #ifdef _OPENMP
 c$omp parallel
       numThreads = OMP_get_num_threads()
@@ -654,6 +656,11 @@ c
             tv(i)  = 0.0
       end do
       dismxs = ((real(nlag) + 0.5 - EPSLON) * xlag) ** 2
+
+      fin = etime(elapsed)
+      total = fin - init
+      print *, 'data loading total ', total
+
 c
 c MAIN LOOP OVER ALL PAIRS:
 c
