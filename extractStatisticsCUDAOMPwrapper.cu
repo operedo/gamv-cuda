@@ -294,229 +294,236 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
 //    float dx,dy,dz;
 
     float dx,dy,dz,dxs,dys,dzs,hs,invh;
-    int id,ii,il,it,iv;
+    int id,ii,jj,il,it,iv;
     int lagbeg,lagend,ilag;
     float band,dcazm,dcdec,dxy,vrh,vrhpr,vrt,vrtpr,h;
     int omni;
+    int d_ivtailtmp, d_ivheadtmp;
+    int index;
 
     //if(i<nd && j<nd){
 
-//    dx  = d_x[i] - dxj;
-//    dy  = d_y[i] - dyj;
-//    dz  = d_z[i] - dzj;
-//    //dx  = d_x[i] - d_x[j];
-//    //dy  = d_y[i] - d_y[j];
-//    //dz  = d_z[i] - d_z[j];
-//    //dx  = 0.0;//d_x[i] - d_x[j];
-//    //dy  = 0.0;//d_y[i] - d_y[j];
-//    //dz  = 0.0;//d_z[i] - d_z[j];
-//    dxs = dx*dx;
-//    dys = dy*dy;
-//    dzs = dz*dz;
-//    hs  = dxs + dys + dzs;
-//
-//    if(hs <= dismxs)
-//    {
-//        if(hs < 0.0) hs = 0.0;
-//        h   = sqrtf(hs);
-//        invh=1.0/h;
-//
-//
-//    //
-//    // Determine which lag this is and skip if outside the defined distance
-//    // tolerance:
-//    //
-//        //if(h<=EPSLON){
-//            lagbeg = 1;
-//            lagend = 1;
-//        //}
-//        //else{
-//        if(h>EPSLON){
-//            lagbeg = -1;
-//            lagend = -1;
-//            //for(ilag=2;ilag<=nlag+2;ilag++){
-//            //    if(h>=(xlag*(float)(ilag-2)-xltol) && h<=(xlag*(float)(ilag-2)+xltol)){
-//            //        if(lagbeg<0) lagbeg = ilag;
-//            //        lagend = ilag;
-//            //    }
-//            //}
-//
-//            int ilag=0;
-//            int liminf=ceil((h-xltol)*xlaginv)+2;
-//            int limsup=floor((h+xltol)*xlaginv)+2;
-//            for(ilag=liminf;ilag<=limsup;ilag++){
-//                if(lagbeg<0)lagbeg=ilag;
-//                lagend=ilag;
-//            }
-//	}
-//        if(lagend>=0)
-//        {
-//        //			printf("dx=%f dy=%f dz=%fh=%f lagbeg=%d lagend=%d\n",dx,dy,dz,h,lagbeg,lagend);
-//
-//
-//        //
-//        // Definition of the direction corresponding to the current pair. All
-//        // directions are considered (overlapping of direction tolerance cones
-//        // is allowed):
-//        //
-//
-//
-//            dxy = sqrtf(MAX((dxs+dys),0.0));
-//            float invdxy=1.0/dxy;
-//            for(id=0;id<ndir;id++){
-//            //
-//            // Check for an acceptable azimuth angle:
-//            //
-//                //if(dxy<EPSLON){
-//                    dcazm = 1.0;
-//                //}
-//                //else{
-//                if(dxy>=EPSLON){
-//                    //dcazm = (dx*d_uvxazm[id]+dy*d_uvyazm[id])/dxy;
-//                    dcazm = (dx*d_uvxazm[id]+dy*d_uvyazm[id])*invdxy;
-//                }
-//                if(fabsf(dcazm)>=d_csatol[id])
-//                {
-//            //
-//            // Check the horizontal bandwidth criteria (maximum deviation
-//            // perpendicular to the specified direction azimuth):
-//            //
-//                    band = d_uvxazm[id]*dy - d_uvyazm[id]*dx;
-//                    if(fabsf(band)<d_bandwh[id])
-//                    {
-//                        //fprintf(stdout,"dxy=%f\tdcazm=%f\tband=%f\n",dxy,dcazm,band);
-//
-//
-//                //
-//                // Check for an acceptable dip angle:
-//                //
-//                        if(dcazm<0.0) dxy = -dxy;
-//                        //if(lagbeg==1)
-//                            dcdec = 0.0;
-//                        //else{
-//                        if(lagbeg!=1){
-//                            //dcdec = (dxy*d_uvhdec[id]+dz*d_uvzdec[id])/h;
-//                            dcdec = (dxy*d_uvhdec[id]+dz*d_uvzdec[id])*invh;
-//
-//                        }
-//                        band = d_uvhdec[id]*dz - d_uvzdec[id]*dxy;
-//                        if(fabsf(dcdec)>=d_csdtol[id] && fabsf(band)<=d_bandwd[id])
-//                        {
-//                    //
-//                    // Check the vertical bandwidth criteria (maximum deviation perpendicular
-//                    // to the specified dip direction):
-//                    //
-//
-//                        //
-//                        // Check whether or not an omni-directional variogram is being computed:
-//                        //
-//                                omni = 0;
-//                                if(d_atol[id]>=90.0) omni = 1;
-//                        //
-//                        // This direction is acceptable - go ahead and compute all variograms:
-//                        //
-//
-//                            //printf("dxy=%f dcazm=%f uvxazm[0]=%f uvyazm[0]=%f band=%f dcdec=%f omni=%d csdtol[0]=%f\n",dxy,dcazm,uvxazm[0],uvyazm[0],band,dcdec,omni,csdtol[0]);
-//
-//                        //				fprintf(stdout,"dcazm=%f\tdcdec=%f\n",dcazm,dcdec);
-//
-//                            for(iv=0;iv<nvarg;iv++){
-//                    //
-//                    // For this variogram, sort out which is the tail and the head value:
-//                    //
-//                                it = d_ivtype[iv];
-//                                if(dcazm>=0.0 && dcdec>=0.0){
-//                                    ii = d_ivtail[iv]-1;
-//                                    vrh   = d_vr[i+ii*(maxdat)];
-//                                    ii = d_ivhead[iv]-1;
-//                                    vrt   = d_vr[j+ii*(maxdat)];
-//                                    if(omni || it==2){
-//                                        ii    = d_ivhead[iv]-1;
-//                                        vrtpr = d_vr[i+ii*(maxdat)];
-//                                        ii    = d_ivtail[iv]-1;
-//                                        vrhpr = d_vr[j+ii*(maxdat)];
-//                                    }
-//                                }
-//                                else{
-//                                    ii = d_ivtail[iv]-1;
-//                                    vrh   = d_vr[j+ii*(maxdat)];
-//                                    ii = d_ivhead[iv]-1;
-//                                    vrt   = d_vr[i+ii*(maxdat)];
-//                                    if(omni || it==2){
-//                                        ii    = d_ivhead[iv]-1;
-//                                        vrtpr = d_vr[j+ii*(maxdat)];
-//                                        ii    = d_ivtail[iv]-1;
-//                                        vrhpr = d_vr[i+ii*(maxdat)];
-//                                    }
-//                                }
-//                    //
-//                    // Reject this pair on the basis of missing values:
-//                    //
-//                                if(vrt>=tmin && vrh>=tmin && vrt<=tmax && vrh<=tmax && it!=2 || (vrtpr>=tmin && vrhpr>=tmin && vrtpr<=tmax && vrhpr<=tmax))
-//                                {
-//                                    if(it==1 || it==5 || it>=9){
-//                                        for(il=lagbeg;il<=lagend;il++){
-//                                            ii = (id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2)+il -1;
-//						//sh_np[ii + mxdlv*sh_pos]+=1.0;
-//						//sh_dis[ii + mxdlv*sh_pos]+=(h);
-//						//sh_tm[ii + mxdlv*sh_pos]+=(vrt);
-//						//sh_hm[ii + mxdlv*sh_pos]+=(vrh);
-//						//sh_gam[ii + mxdlv*sh_pos]+=((vrh-vrt)*(vrh-vrt));
-//
-//						sh_np[ii]+=1.0;
-//						sh_dis[ii]+=(h);
-//						sh_tm[ii]+=(vrt);
-//						sh_hm[ii]+=(vrh);
-//						sh_gam[ii]+=((vrh-vrt)*(vrh-vrt));
-//
-//                                            if(omni){
-//                                                if(vrtpr>=tmin && vrhpr>=tmin && vrtpr<tmax && vrhpr<tmax){
-//
-//						//sh_np[ii + mxdlv*sh_pos]+=1.0;
-//						//sh_dis[ii + mxdlv*sh_pos]+=(h);
-//						//sh_tm[ii + mxdlv*sh_pos]+=(vrtpr);
-//						//sh_hm[ii + mxdlv*sh_pos]+=(vrhpr);
-//						//sh_gam[ii + mxdlv*sh_pos]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
-//
-//						sh_np[ii ]+=1.0;
-//						sh_dis[ii]+=(h);
-//						sh_tm[ii ]+=(vrtpr);
-//						sh_hm[ii ]+=(vrhpr);
-//						sh_gam[ii]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
-//
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//
-//                                    // The Traditional Cross Semivariogram:
-//                //
-//                                    else if(it==2){
-//                                        for(il=lagbeg;il<=lagend;il++){
-//                                            ii = (id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2)+il -1;
-//						sh_np[ii ]+=1.0;
-//						sh_dis[ii]+=(h);
-//						sh_tm[ii ]+=(0.5*(vrt+vrtpr));
-//						sh_hm[ii ]+=(0.5*(vrh+vrhpr));
-//						sh_gam[ii]+=((vrhpr-vrh)*(vrt-vrtpr));
-//
-//                                        }
-//                                    }
-//				/*
-//
-//					Note: 
-//					If new spatial measure are requiered, they must be implemented here following the 
-//					previous examples, with it=1,2,5,9.
-//
-//				*/
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    dx  = d_x[i] - dxj;
+    dy  = d_y[i] - dyj;
+    dz  = d_z[i] - dzj;
+    //dx  = d_x[i] - d_x[j];
+    //dy  = d_y[i] - d_y[j];
+    //dz  = d_z[i] - d_z[j];
+    //dx  = 0.0;//d_x[i] - d_x[j];
+    //dy  = 0.0;//d_y[i] - d_y[j];
+    //dz  = 0.0;//d_z[i] - d_z[j];
+    dxs = dx*dx;
+    dys = dy*dy;
+    dzs = dz*dz;
+    hs  = dxs + dys + dzs;
+
+    if(hs <= dismxs)
+    {
+        if(hs < 0.0) hs = 0.0;
+        h   = sqrtf(hs);
+        invh=1.0/h;
+
+
+    //
+    // Determine which lag this is and skip if outside the defined distance
+    // tolerance:
+    //
+        //if(h<=EPSLON){
+            lagbeg = 1;
+            lagend = 1;
+        //}
+        //else{
+        if(h>EPSLON){
+            lagbeg = -1;
+            lagend = -1;
+            //for(ilag=2;ilag<=nlag+2;ilag++){
+            //    if(h>=(xlag*(float)(ilag-2)-xltol) && h<=(xlag*(float)(ilag-2)+xltol)){
+            //        if(lagbeg<0) lagbeg = ilag;
+            //        lagend = ilag;
+            //    }
+            //}
+
+            int ilag=0;
+            int liminf=ceil((h-xltol)*xlaginv)+2;
+            int limsup=floor((h+xltol)*xlaginv)+2;
+            for(ilag=liminf;ilag<=limsup;ilag++){
+                if(lagbeg<0)lagbeg=ilag;
+                lagend=ilag;
+            }
+	}
+        if(lagend>=0)
+        {
+        //			printf("dx=%f dy=%f dz=%fh=%f lagbeg=%d lagend=%d\n",dx,dy,dz,h,lagbeg,lagend);
+
+
+        //
+        // Definition of the direction corresponding to the current pair. All
+        // directions are considered (overlapping of direction tolerance cones
+        // is allowed):
+        //
+
+
+            dxy = sqrtf(MAX((dxs+dys),0.0));
+            float invdxy=1.0/dxy;
+            for(id=0;id<ndir;id++){
+            //
+            // Check for an acceptable azimuth angle:
+            //
+                //if(dxy<EPSLON){
+                    dcazm = 1.0;
+                //}
+                //else{
+                if(dxy>=EPSLON){
+                    //dcazm = (dx*d_uvxazm[id]+dy*d_uvyazm[id])/dxy;
+                    dcazm = (dx*d_uvxazm[id]+dy*d_uvyazm[id])*invdxy;
+                }
+                if(fabsf(dcazm)>=d_csatol[id])
+                {
+            //
+            // Check the horizontal bandwidth criteria (maximum deviation
+            // perpendicular to the specified direction azimuth):
+            //
+                    band = d_uvxazm[id]*dy - d_uvyazm[id]*dx;
+                    if(fabsf(band)<d_bandwh[id])
+                    {
+                        //fprintf(stdout,"dxy=%f\tdcazm=%f\tband=%f\n",dxy,dcazm,band);
+
+
+                //
+                // Check for an acceptable dip angle:
+                //
+                        if(dcazm<0.0) dxy = -dxy;
+                        //if(lagbeg==1)
+                            dcdec = 0.0;
+                        //else{
+                        if(lagbeg!=1){
+                            //dcdec = (dxy*d_uvhdec[id]+dz*d_uvzdec[id])/h;
+                            dcdec = (dxy*d_uvhdec[id]+dz*d_uvzdec[id])*invh;
+
+                        }
+                        band = d_uvhdec[id]*dz - d_uvzdec[id]*dxy;
+                        if(fabsf(dcdec)>=d_csdtol[id] && fabsf(band)<=d_bandwd[id])
+                        {
+                    //
+                    // Check the vertical bandwidth criteria (maximum deviation perpendicular
+                    // to the specified dip direction):
+                    //
+
+                        //
+                        // Check whether or not an omni-directional variogram is being computed:
+                        //
+                                omni = 0;
+                                if(d_atol[id]>=90.0) omni = 1;
+                        //
+                        // This direction is acceptable - go ahead and compute all variograms:
+                        //
+
+                            //printf("dxy=%f dcazm=%f uvxazm[0]=%f uvyazm[0]=%f band=%f dcdec=%f omni=%d csdtol[0]=%f\n",dxy,dcazm,uvxazm[0],uvyazm[0],band,dcdec,omni,csdtol[0]);
+
+                        //				fprintf(stdout,"dcazm=%f\tdcdec=%f\n",dcazm,dcdec);
+
+                            for(iv=0;iv<nvarg;iv++){
+                    //
+                    // For this variogram, sort out which is the tail and the head value:
+                    //
+				d_ivtailtmp=(d_ivtail[iv]-1)*maxdat;
+				d_ivheadtmp=(d_ivhead[iv]-1)*maxdat;
+
+                                it = d_ivtype[iv];
+                                if(dcazm>=0.0 && dcdec>=0.0){
+                                    //ii = d_ivtail[iv]-1;
+                                    vrh   = d_vr[i+d_ivtailtmp];
+                                    //jj = d_ivhead[iv]-1;
+                                    vrt   = d_vr[j+d_ivheadtmp];
+                                    if(omni || it==2){
+                                        //ii    = d_ivhead[iv]-1;
+                                        vrtpr = d_vr[i+d_ivheadtmp];
+                                        //jj    = d_ivtail[iv]-1;
+                                        vrhpr = d_vr[j+d_ivtailtmp];
+                                    }
+                                }
+                                else{
+                                    //jj = d_ivtail[iv]-1;
+                                    vrh   = d_vr[j+d_ivtailtmp];
+                                    //ii = d_ivhead[iv]-1;
+                                    vrt   = d_vr[i+d_ivheadtmp];
+                                    if(omni || it==2){
+                                        //jj    = d_ivhead[iv]-1;
+                                        vrtpr = d_vr[j+d_ivheadtmp];
+                                        //ii    = d_ivtail[iv]-1;
+                                        vrhpr = d_vr[i+d_ivtailtmp];
+                                    }
+                                }
+                    //
+                    // Reject this pair on the basis of missing values:
+                    //
+                                if(vrt>=tmin && vrh>=tmin && vrt<=tmax && vrh<=tmax && it!=2 || (vrtpr>=tmin && vrhpr>=tmin && vrtpr<=tmax && vrhpr<=tmax))
+                                {
+                                    if(it==1 || it==5 || it>=9){
+					index=(id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2) - 1; 
+                                        for(il=lagbeg;il<=lagend;il++){
+                                            ii = index + il;
+						//sh_np[ii + mxdlv*sh_pos]+=1.0;
+						//sh_dis[ii + mxdlv*sh_pos]+=(h);
+						//sh_tm[ii + mxdlv*sh_pos]+=(vrt);
+						//sh_hm[ii + mxdlv*sh_pos]+=(vrh);
+						//sh_gam[ii + mxdlv*sh_pos]+=((vrh-vrt)*(vrh-vrt));
+
+						sh_np[ii]+=1.0;
+						sh_dis[ii]+=(h);
+						sh_tm[ii]+=(vrt);
+						sh_hm[ii]+=(vrh);
+						sh_gam[ii]+=((vrh-vrt)*(vrh-vrt));
+
+                                            if(omni){
+                                                if(vrtpr>=tmin && vrhpr>=tmin && vrtpr<tmax && vrhpr<tmax){
+
+						//sh_np[ii + mxdlv*sh_pos]+=1.0;
+						//sh_dis[ii + mxdlv*sh_pos]+=(h);
+						//sh_tm[ii + mxdlv*sh_pos]+=(vrtpr);
+						//sh_hm[ii + mxdlv*sh_pos]+=(vrhpr);
+						//sh_gam[ii + mxdlv*sh_pos]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
+
+						sh_np[ii ]+=1.0;
+						sh_dis[ii]+=(h);
+						sh_tm[ii ]+=(vrtpr);
+						sh_hm[ii ]+=(vrhpr);
+						sh_gam[ii]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
+
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // The Traditional Cross Semivariogram:
+                //
+                                    else if(it==2){
+					index=(id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2) - 1; 
+                                        for(il=lagbeg;il<=lagend;il++){
+                                            ii = index + il;
+						sh_np[ii ]+=1.0;
+						sh_dis[ii]+=(h);
+						sh_tm[ii ]+=(0.5*(vrt+vrtpr));
+						sh_hm[ii ]+=(0.5*(vrh+vrhpr));
+						sh_gam[ii]+=((vrhpr-vrh)*(vrt-vrtpr));
+
+                                        }
+                                    }
+				/*
+
+					Note: 
+					If new spatial measure are requiered, they must be implemented here following the 
+					previous examples, with it=1,2,5,9.
+
+				*/
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     //}
 
@@ -1793,6 +1800,12 @@ extern "C" int extractstatisticscudaompwrapper_(
 		//cudaDeviceSynchronize();
     	}
        	Check_CUDA_Error("fitness kernel");
+	cudaEventRecord(stop, streamid);
+       	cudaEventSynchronize(stop);
+       	cudaEventElapsedTime(&time, start, stop);
+	printf ("Time for the GPU kernel: %f s\n", time/1000);
+ 
+
       	//printf ("GPU time: %f\n", time/1000);
        	//printf("------------------------------\n");
 
@@ -1818,18 +1831,14 @@ extern "C" int extractstatisticscudaompwrapper_(
                                     vr,frac_nd,thres_hybrid2);
         time_value = get_gtod_clock_time ();
         time_diff = time_value - prev_time_value;
-        printf ("Time for the OpenMP kernel: %f s\n", (float)(time_diff)/1000.0); 
+        printf ("Time for the CPU kernel: %f s\n", (float)(time_diff)/1000000.0); 
 
 
 
 	//cudaStreamSynchronize(0);
-       	cudaStreamSynchronize(streamid);
-       	cudaEventRecord(stop, streamid);
-       	cudaEventSynchronize(stop);
-       	cudaEventElapsedTime(&time, start, stop);
-	printf ("Time for the GPU kernel: %f s\n", time/1000);
- 
-       	cudaEventCreate(&start);
+       	//cudaStreamSynchronize(streamid);
+       	       	
+	cudaEventCreate(&start);
        	cudaEventCreate(&stop);
        	cudaEventRecord(start, streamid);
 
