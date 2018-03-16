@@ -40,6 +40,16 @@ Add description and legal texts
 
 #endif
 
+uint64_t get_gtod_clock_time ()
+{
+    struct timeval tv;
+
+    if (gettimeofday (&tv, NULL) == 0)
+        return (uint64_t) (tv.tv_sec * 1000000 + tv.tv_usec);
+    else
+        return 0;
+}
+
 void Check_CUDA_Error(const char *message)
 {
 	cudaError_t error = cudaGetLastError();
