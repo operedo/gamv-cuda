@@ -282,6 +282,7 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
                                     const float xlag, const float xltol,
                                     const int mxdlv,
                                     float *sh_np,float *sh_dis,float *sh_tm,float *sh_hm,float *sh_gam,
+                                    //float *sh_loc,
                                     const float dismxs, const float tmax, const float tmin,
                                     const int ndir, const int nvarg,
                                     float *d_uvxazm,  float *d_uvyazm,  float *d_uvzdec,  float *d_uvhdec,
@@ -474,6 +475,11 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
 						sh_tm[ii]+=(vrt);
 						sh_hm[ii]+=(vrh);
 						sh_gam[ii]+=((vrh-vrt)*(vrh-vrt));
+						//sh_loc[ii]+=1.0;
+						//sh_loc[ii+1]+=(h);
+						//sh_loc[ii+2]+=(vrt);
+						//sh_loc[ii+3]+=(vrh);
+						//sh_loc[ii+4]+=((vrh-vrt)*(vrh-vrt));
 
                                             if(omni){
                                                 if(vrtpr>=tmin && vrhpr>=tmin && vrtpr<tmax && vrhpr<tmax){
@@ -489,6 +495,11 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
 						sh_tm[ii ]+=(vrtpr);
 						sh_hm[ii ]+=(vrhpr);
 						sh_gam[ii]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
+						//sh_loc[ii ]+=1.0;
+						//sh_loc[ii+1]+=(h);
+						//sh_loc[ii+2]+=(vrtpr);
+						//sh_loc[ii+3]+=(vrhpr);
+						//sh_loc[ii+4]+=((vrhpr-vrtpr)*(vrhpr-vrtpr));
 
                                                 }
                                             }
@@ -506,6 +517,11 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
 						sh_tm[ii ]+=(0.5*(vrt+vrtpr));
 						sh_hm[ii ]+=(0.5*(vrh+vrhpr));
 						sh_gam[ii]+=((vrhpr-vrh)*(vrt-vrtpr));
+						//sh_loc[ii ]+=1.0;
+						//sh_loc[ii+1]+=(h);
+						//sh_loc[ii+2]+=(0.5*(vrt+vrtpr));
+						//sh_loc[ii+3]+=(0.5*(vrh+vrhpr));
+						//sh_loc[ii+4]+=((vrhpr-vrh)*(vrt-vrtpr));
 
                                         }
                                     }
@@ -1470,12 +1486,20 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
     float sh_hm_loc[mxdlv]; 
     float sh_tm_loc[mxdlv]; 
 
+    //float sh_loc[5*mxdlv]; 
+
     for(jj=0;jj<mxdlv;jj++){
         sh_np_loc[jj]=0.0;
         sh_dis_loc[jj]=0.0;
         sh_tm_loc[jj]=0.0;
         sh_hm_loc[jj]=0.0;
         sh_gam_loc[jj]=0.0;
+        //sh_loc[jj]=0.0;
+        //sh_loc[jj+1]=0.0;
+        //sh_loc[jj+2]=0.0;
+        //sh_loc[jj+3]=0.0;
+        //sh_loc[jj+4]=0.0;
+
     }
 
 
@@ -1494,6 +1518,7 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
         d_x,d_y,d_z,
         EPSLON,nlag,xlag,xltol,
         mxdlv,sh_np_loc,sh_dis_loc,sh_tm_loc,sh_hm_loc,sh_gam_loc,
+        //mxdlv,sh_loc,
         //mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
         dismxs,tmax,tmin,ndir,nvarg,
         d_uvxazm,d_uvyazm,d_uvzdec,d_uvhdec,
@@ -1531,10 +1556,10 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
     //for(ii=0;ii<num_threads;ii++){
     for(jj=0;jj<mxdlv;jj++){
         sh_np[jj+threadId*mxdlv]	=sh_np_loc[jj];;
-        sh_dis[jj+threadId*mxdlv]	=sh_dis_loc[jj];
-        sh_tm[jj+threadId*mxdlv]	=sh_tm_loc[jj];
-        sh_hm[jj+threadId*mxdlv]	=sh_hm_loc[jj];
-        sh_gam[jj+threadId*mxdlv]	=sh_gam_loc[jj];
+        sh_dis[jj+threadId*mxdlv]	=sh_dis_loc[jj+1];
+        sh_tm[jj+threadId*mxdlv]	=sh_tm_loc[jj+2];
+        sh_hm[jj+threadId*mxdlv]	=sh_hm_loc[jj+3];
+        sh_gam[jj+threadId*mxdlv]	=sh_gam_loc[jj+4];
     }
     //}
 
