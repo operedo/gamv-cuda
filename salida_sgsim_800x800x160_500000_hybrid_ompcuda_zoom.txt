@@ -1,0 +1,16 @@
+salida_sgsim_800x800x160_500000_hybrid_0.0.txt:43.75user 35.00system 1:22.92elapsed 94%CPU (0avgtext+0avgdata 95368maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.00001.txt:49.61user 37.34system 1:31.48elapsed 95%CPU (0avgtext+0avgdata 95372maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.0001.txt:49.66user 37.66system 1:31.46elapsed 95%CPU (0avgtext+0avgdata 95212maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.001.txt:51.95user 37.88system 1:31.28elapsed 98%CPU (0avgtext+0avgdata 95248maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.01.txt:71.71user 34.64system 1:22.48elapsed 128%CPU (0avgtext+0avgdata 95240maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.05.txt:179.01user 30.84system 1:17.80elapsed 269%CPU (0avgtext+0avgdata 97340maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.1.txt:306.00user 26.79system 1:12.82elapsed 456%CPU (0avgtext+0avgdata 95244maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.15.txt:420.86user 23.14system 1:08.07elapsed 652%CPU (0avgtext+0avgdata 95208maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.2.txt:543.81user 21.76system 1:13.52elapsed 769%CPU (0avgtext+0avgdata 95372maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.25.txt:661.56user 21.42system 1:23.51elapsed 817%CPU (0avgtext+0avgdata 95252maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.3.txt:764.93user 21.83system 1:32.42elapsed 851%CPU (0avgtext+0avgdata 95168maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.35.txt:865.79user 21.70system 1:40.59elapsed 882%CPU (0avgtext+0avgdata 95168maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.4.txt:957.88user 21.98system 1:48.62elapsed 902%CPU (0avgtext+0avgdata 95208maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.45.txt:1042.94user 21.88system 1:56.04elapsed 917%CPU (0avgtext+0avgdata 95308maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_0.5.txt:1127.61user 22.04system 2:03.72elapsed 929%CPU (0avgtext+0avgdata 95428maxresident)k
+salida_sgsim_800x800x160_500000_hybrid_1.0.txt:1490.95user 22.29system 2:34.29elapsed 980%CPU (0avgtext+0avgdata 95204maxresident)k
