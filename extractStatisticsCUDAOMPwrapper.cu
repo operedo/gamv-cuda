@@ -322,21 +322,22 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
     {
         if(hs < 0.0) hs = 0.0;
         h   = sqrtf(hs);
-        invh=1.0/h;
+        invh=1.0f/h;
 
 
     //
     // Determine which lag this is and skip if outside the defined distance
     // tolerance:
     //
-        //if(h<=EPSLON){
+        if(h<=EPSLON){
             lagbeg = 1;
             lagend = 1;
-        //}
-        //else{
-        if(h>EPSLON){
+        }
+        else{
+        //if(h>EPSLON){
             lagbeg = -1;
             lagend = -1;
+
             //for(ilag=2;ilag<=nlag+2;ilag++){
             //    if(h>=(xlag*(float)(ilag-2)-xltol) && h<=(xlag*(float)(ilag-2)+xltol)){
             //        if(lagbeg<0) lagbeg = ilag;
@@ -347,10 +348,15 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
             int ilag=0;
             int liminf=ceil((h-xltol)*xlaginv)+2;
             int limsup=floor((h+xltol)*xlaginv)+2;
-            for(ilag=liminf;ilag<=limsup;ilag++){
-                if(lagbeg<0)lagbeg=ilag;
-                lagend=ilag;
-            }
+//            for(ilag=liminf;ilag<=limsup;ilag++){
+//                if(lagbeg<0)lagbeg=ilag;
+//                lagend=ilag;
+//            }
+
+            lagbeg=liminf;
+            lagend=limsup;
+
+
 	}
         if(lagend>=0)
         {
@@ -365,16 +371,16 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
 
 
             dxy = sqrtf(MAX((dxs+dys),0.0));
-            float invdxy=1.0/dxy;
+            float invdxy=1.0f/dxy;
             for(id=0;id<ndir;id++){
             //
             // Check for an acceptable azimuth angle:
             //
-                //if(dxy<EPSLON){
+                if(dxy<EPSLON){
                     dcazm = 1.0;
-                //}
-                //else{
-                if(dxy>=EPSLON){
+                }
+                else{
+                //if(dxy>=EPSLON){
                     //dcazm = (dx*d_uvxazm[id]+dy*d_uvyazm[id])/dxy;
                     dcazm = (dx*d_uvxazm[id]+dy*d_uvyazm[id])*invdxy;
                 }
@@ -394,10 +400,10 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
                 // Check for an acceptable dip angle:
                 //
                         if(dcazm<0.0) dxy = -dxy;
-                        //if(lagbeg==1)
+                        if(lagbeg==1)
                             dcdec = 0.0;
-                        //else{
-                        if(lagbeg!=1){
+                        else{
+                        //if(lagbeg!=1){
                             //dcdec = (dxy*d_uvhdec[id]+dz*d_uvzdec[id])/h;
                             dcdec = (dxy*d_uvhdec[id]+dz*d_uvzdec[id])*invh;
 
@@ -422,6 +428,43 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
                             //printf("dxy=%f dcazm=%f uvxazm[0]=%f uvyazm[0]=%f band=%f dcdec=%f omni=%d csdtol[0]=%f\n",dxy,dcazm,uvxazm[0],uvyazm[0],band,dcdec,omni,csdtol[0]);
 
                         //				fprintf(stdout,"dcazm=%f\tdcdec=%f\n",dcazm,dcdec);
+
+
+///////////////////
+//				for(iv=0;iv<nvarg;iv++){
+////
+//// For this variogram, sort out which is the tail and the head value:
+////
+//					it = d_ivtype[iv];
+//					if(dcazm>=0.0 && dcdec>=0.0){
+//						ii = d_ivtail[iv]-1;
+//						vrh   = d_vr[i+ii*(maxdat)];
+//						ii = d_ivhead[iv]-1;
+//						vrt   = d_vr[j+ii*(maxdat)];
+//						if(omni || it==2){
+//							ii    = d_ivhead[iv]-1;
+//							vrtpr = d_vr[i+ii*(maxdat)];
+//							ii    = d_ivtail[iv]-1;
+//							vrhpr = d_vr[j+ii*(maxdat)];
+//						}
+//					}
+//					else{
+//						ii = d_ivtail[iv]-1;
+//						vrh   = d_vr[j+ii*(maxdat)];
+//						ii = d_ivhead[iv]-1;
+//						vrt   = d_vr[i+ii*(maxdat)];
+//						if(omni || it==2){
+//							ii    = d_ivhead[iv]-1;
+//							vrtpr = d_vr[j+ii*(maxdat)];
+//							ii    = d_ivtail[iv]-1;
+//							vrhpr = d_vr[i+ii*(maxdat)];
+//						}
+//					}
+
+
+
+
+///////////////////
 
                             for(iv=0;iv<nvarg;iv++){
                     //
@@ -463,7 +506,8 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
                                     if(it==1 || it==5 || it>=9){
 					index=(id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2) - 1; 
                                         for(il=lagbeg;il<=lagend;il++){
-                                            ii = index + il;
+                                            //ii = index + il;
+                                            ii = (id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2) - 1 + il;
 						//sh_np[ii + mxdlv*sh_pos]+=1.0;
 						//sh_dis[ii + mxdlv*sh_pos]+=(h);
 						//sh_tm[ii + mxdlv*sh_pos]+=(vrt);
@@ -511,7 +555,8 @@ __host__ void computeVariogramOMP(float dxj, float dyj, float dzj, int i, int  j
                                     else if(it==2){
 					index=(id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2) - 1; 
                                         for(il=lagbeg;il<=lagend;il++){
-                                            ii = index + il;
+                                            //ii = index + il;
+                                            ii = (id)*(nvarg)*((nlag)+2)+(iv)*((nlag)+2) - 1 + il;
 						sh_np[ii ]+=1.0;
 						sh_dis[ii]+=(h);
 						sh_tm[ii ]+=(0.5*(vrt+vrtpr));
@@ -1556,10 +1601,10 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
     //for(ii=0;ii<num_threads;ii++){
     for(jj=0;jj<mxdlv;jj++){
         sh_np[jj+threadId*mxdlv]	=sh_np_loc[jj];;
-        sh_dis[jj+threadId*mxdlv]	=sh_dis_loc[jj+1];
-        sh_tm[jj+threadId*mxdlv]	=sh_tm_loc[jj+2];
-        sh_hm[jj+threadId*mxdlv]	=sh_hm_loc[jj+3];
-        sh_gam[jj+threadId*mxdlv]	=sh_gam_loc[jj+4];
+        sh_dis[jj+threadId*mxdlv]	=sh_dis_loc[jj];
+        sh_tm[jj+threadId*mxdlv]	=sh_tm_loc[jj];
+        sh_hm[jj+threadId*mxdlv]	=sh_hm_loc[jj];
+        sh_gam[jj+threadId*mxdlv]	=sh_gam_loc[jj];
     }
     //}
 
@@ -1805,6 +1850,7 @@ extern "C" int extractstatisticscudaompwrapper_(
         	//variogramKernel<<< blocks, threads,shared_mem_size, streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
 		frac_nd = (*maxdat-thres_hybrid2)/THREADSX;
        		dim3 blocks2( (frac_nd + threads.x - 1)/threads.x,(frac_nd + threads.y - 1)/threads.y,1 );
+		if(thres_factor<1.0){
         	variogramKernelShrinked<<< blocks2, threads,shared_mem_size, streamid >>>(*nd,*irepo,*maxdat,*MAXVAR,
                                             d_x,d_y,d_z,
                                             *EPSLON,
@@ -1819,16 +1865,16 @@ extern "C" int extractstatisticscudaompwrapper_(
                                             d_atol,
                                             d_ivtype,d_ivtail,d_ivhead,
                                             d_vr,frac_nd,thres_hybrid);
-	
+		}
      
 
 		//cudaDeviceSynchronize();
     	}
-       	Check_CUDA_Error("fitness kernel");
-	cudaEventRecord(stop, streamid);
-       	cudaEventSynchronize(stop);
-       	cudaEventElapsedTime(&time, start, stop);
-	printf ("Time for the GPU kernel: %f s\n", time/1000);
+//       	Check_CUDA_Error("fitness kernel");
+//	cudaEventRecord(stop, streamid);
+//       	cudaEventSynchronize(stop);
+//       	cudaEventElapsedTime(&time, start, stop);
+//	printf ("Time for the GPU kernel: %f s\n", time/1000);
  
 
       	//printf ("GPU time: %f\n", time/1000);
@@ -1867,6 +1913,7 @@ extern "C" int extractstatisticscudaompwrapper_(
        	cudaEventCreate(&stop);
        	cudaEventRecord(start, streamid);
 
+       	cudaStreamSynchronize(streamid);
     	cudaMemcpyAsync( h_np, d_np,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
     	//Check_CUDA_Error("cpy d -> h");
     	cudaMemcpyAsync( h_dis, d_dis,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
@@ -1877,7 +1924,6 @@ extern "C" int extractstatisticscudaompwrapper_(
     	//Check_CUDA_Error("cpy d -> h");
     	cudaMemcpyAsync( h_tm, d_tm,sizeof(DT) * (*mxdlv),cudaMemcpyDeviceToHost, streamid);
     	//Check_CUDA_Error("cpy d -> h");
-       	cudaStreamSynchronize(streamid);
        	cudaEventRecord(stop, streamid);
        	cudaEventSynchronize(stop);
        	cudaEventElapsedTime(&time, start, stop);
