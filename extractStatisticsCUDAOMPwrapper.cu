@@ -937,7 +937,7 @@ __global__ void variogramKernelShrinked(    const int nd, const int irepo, const
                                     float *d_csatol, float *d_csdtol, float *d_bandwh, float *d_bandwd,
                                     float *d_atol,
                                     int *d_ivtype, int *d_ivtail, int *d_ivhead,
-                                    float *d_vr,int frac_nd, int thres_hybrid){
+                                    float *d_vr,int frac_nd, int thres_hybrid2){
 
     int tidx=threadIdx.x;
     int tidy=threadIdx.y;
@@ -945,10 +945,13 @@ __global__ void variogramKernelShrinked(    const int nd, const int irepo, const
     int bidy=blockIdx.y;
     int bdimx=blockDim.x;
     int bdimy=blockDim.y;
-    int idx = bidx*bdimx + tidx + thres_hybrid;
-    int idy = bidy*bdimy + tidy + thres_hybrid;
+    //int idx = bidx*bdimx + tidx + thres_hybrid2;
+    //int idy = bidy*bdimy + tidy + thres_hybrid2;
+    int idx = bidx*bdimx + tidx;
+    int idy = bidy*bdimy + tidy;
     int threadId = tidx + bdimx*tidy;
-    int half_nd = (nd-thres_hybrid)/2;
+    int half_nd = (nd-thres_hybrid2)/2;
+    //int half_nd = thres_hybrid + (nd-thres_hybrid)/2;
     int i,j;
     int num_threads = bdimx*bdimy;
     extern __shared__ float buffer[];
@@ -974,7 +977,8 @@ __global__ void variogramKernelShrinked(    const int nd, const int irepo, const
     //if (idx>=thres_hybrid && idy>=thres_hybrid && idx < frac_nd && idy < frac_nd){
         for (i = idx; i < half_nd; i += frac_nd){
             for (j = idy; j < half_nd; j += frac_nd){
-                computePointsValues(i,j,nd,irepo,maxdat,MAXVAR,
+                //computePointsValues(i,j,nd,irepo,maxdat,MAXVAR,
+                computePointsValues(i+thres_hybrid2,j+thres_hybrid2,nd,irepo,maxdat,MAXVAR,
                     d_x,d_y,d_z,
                     EPSLON,nlag,xlag,xltol,
                     mxdlv,sh_np,sh_dis,sh_tm,sh_hm,sh_gam,
@@ -1510,8 +1514,8 @@ __host__ void variogramKernelOMPOptimizedShrinked(    const int nd, const int ir
     float *sh_tm = &buffer[4*mxdlv*1*num_threads];
 
 
-    int blocksx = (frac_nd + THREADSX - 1)/THREADSX;
-    int blocksy = (frac_nd + THREADSY - 1)/THREADSY;
+    //int blocksx = (frac_nd + THREADSX - 1)/THREADSX;
+    //int blocksy = (frac_nd + THREADSY - 1)/THREADSY;
 
     float d_xidy, d_yidy, d_zidy;
 
@@ -1678,9 +1682,9 @@ extern "C" int extractstatisticscudaompwrapper_(
 	float thres_factor = (float)THRES;
 	//int thres_factor = 2;
 	//int thres_hybrid = (int)(thres_factor*(float)(*maxdat/THREADSX));
-	int thres_hybrid = (int)ceil(((*maxdat)/THREADSX)*thres_factor);
 	int thres_hybrid2 = (int)ceil(((*maxdat))*thres_factor);
-	printf("thres_hybrid=%d\n",thres_hybrid);	
+	int thres_hybrid = (int)ceil(((*maxdat)/THREADSX)*(thres_factor));
+	printf("thres_factor=%f\n",thres_factor);	
 
 
 
@@ -1864,7 +1868,8 @@ extern "C" int extractstatisticscudaompwrapper_(
                                             d_csatol,d_csdtol,d_bandwh,d_bandwd,
                                             d_atol,
                                             d_ivtype,d_ivtail,d_ivhead,
-                                            d_vr,frac_nd,thres_hybrid);
+                                            //d_vr,frac_nd,thres_hybrid);
+                                            d_vr,frac_nd,thres_hybrid2);
 		}
      
 
@@ -1885,6 +1890,8 @@ extern "C" int extractstatisticscudaompwrapper_(
         uint64_t time_diff;
         prev_time_value = get_gtod_clock_time ();
 
+
+
 	frac_nd = (*maxdat)/THREADSX;
 	variogramKernelOMPOptimizedShrinked(*nd,*irepo,*maxdat,*MAXVAR,
                                     x,y,z,
@@ -1900,6 +1907,7 @@ extern "C" int extractstatisticscudaompwrapper_(
                                     atol,
                                     ivtype,ivtail,ivhead,
                                     vr,frac_nd,thres_hybrid2);
+                                    //vr,frac_nd,thres_hybrid*(THREADSX));
         time_value = get_gtod_clock_time ();
         time_diff = time_value - prev_time_value;
         printf ("Time for the CPU kernel: %f s\n", (float)(time_diff)/1000000.0); 
