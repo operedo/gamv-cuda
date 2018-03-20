@@ -1,0 +1,14 @@
+salida_sisim_420x600x400_15625_hybrid_0.00001.txt:0.12user 16.95system 0:19.25elapsed 88%CPU (0avgtext+0avgdata 88544maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.00001.txt:0.16user 16.83system 0:19.19elapsed 88%CPU (0avgtext+0avgdata 88356maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.0001.txt:0.12user 16.79system 0:19.07elapsed 88%CPU (0avgtext+0avgdata 88388maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.0001.txt:0.18user 16.84system 0:19.14elapsed 88%CPU (0avgtext+0avgdata 90488maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.001.txt:0.13user 16.81system 0:19.18elapsed 88%CPU (0avgtext+0avgdata 88776maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.001.txt:0.19user 16.83system 0:19.14elapsed 88%CPU (0avgtext+0avgdata 88440maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.01.txt:0.20user 16.80system 0:19.14elapsed 88%CPU (0avgtext+0avgdata 88676maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.01.txt:0.26user 16.65system 0:18.95elapsed 89%CPU (0avgtext+0avgdata 88540maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.0.txt:0.17user 21.35system 0:25.98elapsed 82%CPU (0avgtext+0avgdata 87804maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.15.txt:0.26user 21.53system 0:25.92elapsed 84%CPU (0avgtext+0avgdata 87804maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.1.txt:0.86user 16.48system 0:18.94elapsed 91%CPU (0avgtext+0avgdata 88476maxresident)k
+salida_sisim_420x600x400_15625_hybrid_0.1.txt:0.90user 16.69system 0:19.07elapsed 92%CPU (0avgtext+0avgdata 88476maxresident)k
+salida_sisim_420x600x400_15625_hybrid_1.0.txt:0.06user 16.42system 0:18.91elapsed 87%CPU (0avgtext+0avgdata 88688maxresident)k
+salida_sisim_420x600x400_15625_hybrid_1.0.txt:0.09user 16.67system 0:18.96elapsed 88%CPU (0avgtext+0avgdata 88472maxresident)k
