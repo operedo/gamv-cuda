@@ -9,7 +9,8 @@ NVCC=nvcc
 FFLAGS= -cpp -O3 
 CFLAGS= -O3 
 #NVFLAGS= -ccbin=/Soft/gcc/4.7.2/bin/gcc -m64 -c -O3 -arch=sm_35
-NVFLAGS= -Xcompiler "-O2 -march=native -ftree-vectorize" -O3 -m64 -c -arch=sm_35 --use_fast_math -DTHRES=${THRES}
+#NVFLAGS= -Xcompiler "-O2 -march=native -ftree-vectorize" -O3 -m64 -c -arch=sm_35 --use_fast_math -DTHRES=${THRES}
+NVFLAGS= -Xcompiler "-O3 -march=native -ftree-vectorize" -O3 -m64 -c -arch=sm_35 --use_fast_math -DTHRES=${THRES}
 
 OPENMP= -fopenmp
 INCS= -I. 
