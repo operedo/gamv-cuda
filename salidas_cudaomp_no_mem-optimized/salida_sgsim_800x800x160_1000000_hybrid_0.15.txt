@@ -72,11 +72,11 @@ extractStatisticsCUDAOMPwrapper.cu(1498): warning: variable "j" was declared but
 
 gfortran -DCUDAOMP -cpp -O3  -I.  -I/usr/local/cuda-10.0/include gamv.o extractStatisticsCUDAOMPwrapper.o   -o gamvCUDAOMP.exe ../gslib-alges/gslib/gslib.a  -lgomp  -L/usr/local/cuda-10.0/lib64 -lcuda -lcudart  -lstdc++ -lm 
 thres_factor=0.150000
-Time for the GPU copy cpu-gpu: 0.003651 s
+Time for the GPU copy cpu-gpu: 0.003584 s
 Inside host kernel
 num_threads=12
-Time for the CPU kernel: 139.265008 s
-Time for the GPU copy gpu->cpu: 0.000097 s
+Time for the CPU kernel: 140.519824 s
+Time for the GPU copy gpu->cpu: 0.000093 s
 Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZERO
 
  GAMV Version: 3.000
@@ -105,11 +105,11 @@ Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZER
 
  Variogram  1 Semivariogram          :  tail=Var          head=Var            
  Parameters ok.
- data loading total    2.80791807    
- extract statistics total    1654.57129    
- total    1657.38013    
+ data loading total    2.79884601    
+ extract statistics total    1665.29480    
+ total    1668.09448    
 
  GAMV Version: 3.000 Finished
 
-1651.33user 6.27system 2:31.51elapsed 1094%CPU (0avgtext+0avgdata 103192maxresident)k
-0inputs+16outputs (0major+4903minor)pagefaults 0swaps
+1662.19user 6.11system 2:32.24elapsed 1095%CPU (0avgtext+0avgdata 105336maxresident)k
+0inputs+16outputs (0major+4887minor)pagefaults 0swaps
