@@ -72,11 +72,11 @@ extractStatisticsCUDAOMPwrapper.cu(1498): warning: variable "j" was declared but
 
 gfortran -DCUDAOMP -cpp -O3  -I.  -I/usr/local/cuda-10.0/include gamv.o extractStatisticsCUDAOMPwrapper.o   -o gamvCUDAOMP.exe ../gslib-alges/gslib/gslib.a  -lgomp  -L/usr/local/cuda-10.0/lib64 -lcuda -lcudart  -lstdc++ -lm 
 thres_factor=0.150000
-Time for the GPU copy cpu-gpu: 0.002314 s
+Time for the GPU copy cpu-gpu: 0.002250 s
 Inside host kernel
 num_threads=12
-Time for the CPU kernel: 35.097560 s
-Time for the GPU copy gpu->cpu: 0.000097 s
+Time for the CPU kernel: 34.784464 s
+Time for the GPU copy gpu->cpu: 0.000088 s
 Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZERO
 
  GAMV Version: 3.000
@@ -86,7 +86,7 @@ Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZER
   number of variables =            1
   columns =            4
   trimming limits =   -1.00000002E+21   1.00000002E+21
-  output file = gamv.out_sgsim_800x800x160_500000_cuda  
+  output file = gamv.out_sgsim_800x800x160_500000_cudaom
   number of lags =           40
   lag distance =    20.0000000    
   lag tolerance =    5.00000000    
@@ -105,11 +105,11 @@ Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZER
 
  Variogram  1 Semivariogram          :  tail=Var          head=Var            
  Parameters ok.
- data loading total    1.41799688    
- extract statistics total    417.454834    
- total    418.873688    
+ data loading total    1.41953301    
+ extract statistics total    417.921387    
+ total    419.341705    
 
  GAMV Version: 3.000 Finished
 
-413.28user 5.83system 0:45.52elapsed 920%CPU (0avgtext+0avgdata 95288maxresident)k
-0inputs+16outputs (0major+4461minor)pagefaults 0swaps
+413.86user 5.72system 0:45.14elapsed 929%CPU (0avgtext+0avgdata 95304maxresident)k
+0inputs+16outputs (0major+4494minor)pagefaults 0swaps

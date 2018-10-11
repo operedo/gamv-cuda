@@ -830,7 +830,7 @@ c
                         write(lout,1102) il,dis(i),gam(i),nump,
      +                                  hm(i),tm(i)
                   endif
- 1102             format(1x,i3,1x,f12.3,1x,f12.5,1x,i8,4(1x,f14.5))
+ 1102             format(1x,i3,1x,f12.3,1x,f12.10,1x,i8,4(1x,f14.5))
             end do
       end do
 c

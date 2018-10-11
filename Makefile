@@ -4,7 +4,7 @@
 
 CC=gcc
 FC=gfortran
-NVCC=nvcc
+NVCC=/usr/local/cuda-10.0/bin/nvcc
 #FFLAGS= -g -cpp -O2 -march=native -ffast-math -ftree-vectorize
 FFLAGS= -cpp -O3 
 CFLAGS= -O3 
@@ -14,10 +14,10 @@ NVFLAGS= -Xcompiler "-O3 -march=native -ftree-vectorize" -O3 -m64 -c -arch=sm_35
 
 OPENMP= -fopenmp
 INCS= -I. 
-NVINCS= -I/usr/local/cuda-8.0/include
+NVINCS= -I/usr/local/cuda-10.0/include
 OPENMPLIBS= -lgomp 
 LIBS= -lstdc++ -lm
-NVLIBS= -L/usr/local/cuda-8.0/lib64 -lcuda -lcudart 
+NVLIBS= -L/usr/local/cuda-10.0/lib64 -lcuda -lcudart 
 
 F_OBJECTS= extractStatisticsFortran.o
 C_OBJECTS= extractStatisticsCwrapper.o 
