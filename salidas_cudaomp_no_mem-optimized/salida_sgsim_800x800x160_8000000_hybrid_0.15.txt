@@ -72,21 +72,21 @@ extractStatisticsCUDAOMPwrapper.cu(1498): warning: variable "j" was declared but
 
 gfortran -DCUDAOMP -cpp -O3  -I.  -I/usr/local/cuda-10.0/include gamv.o extractStatisticsCUDAOMPwrapper.o   -o gamvCUDAOMP.exe ../gslib-alges/gslib/gslib.a  -lgomp  -L/usr/local/cuda-10.0/lib64 -lcuda -lcudart  -lstdc++ -lm 
 thres_factor=0.150000
-Time for the GPU copy cpu-gpu: 0.006283 s
+Time for the GPU copy cpu-gpu: 0.022402 s
 Inside host kernel
 num_threads=12
-Time for the CPU kernel: 554.098240 s
-Time for the GPU copy gpu->cpu: 0.000110 s
+Time for the CPU kernel: 8975.070208 s
+Time for the GPU copy gpu->cpu: 0.000103 s
 Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZERO
 
  GAMV Version: 3.000
 
-  data file = sgsim.out_800x800x160_2000000_header    
+  data file = sgsim.out_800x800x160_8000000_header    
   columns for X,Y,Z =            1           2           3
   number of variables =            1
   columns =            4
   trimming limits =   -1.00000002E+21   1.00000002E+21
-  output file = gamv.out_sgsim_800x800x160_2000000_cudao
+  output file = gamv.out_sgsim_800x800x160_8000000_cudao
   number of lags =           40
   lag distance =    20.0000000    
   lag tolerance =    5.00000000    
@@ -97,19 +97,19 @@ Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZER
   number of variograms =            1
   tail,head,type =            1           1           1
 
- maxdat =      2000000
+ maxdat =      8000000
  Variable number            1
-   Number   =      2000000
-   Average  =   0.933586001    
-   Variance =   0.933281004    
+   Number   =      8000000
+   Average  =   0.933401942    
+   Variance =   0.931611419    
 
  Variogram  1 Semivariogram          :  tail=Var          head=Var            
  Parameters ok.
- data loading total    5.59938622    
- extract statistics total    6619.87451    
- total    6625.47461    
+ data loading total    22.1507607    
+ extract statistics total    107112.281    
+ total    107134.430    
 
  GAMV Version: 3.000 Finished
 
-6617.60user 8.09system 9:29.07elapsed 1164%CPU (0avgtext+0avgdata 118748maxresident)k
-0inputs+16outputs (0major+4712minor)pagefaults 0swaps
+107077.99user 56.75system 2:30:06elapsed 1189%CPU (0avgtext+0avgdata 212456maxresident)k
+0inputs+16outputs (0major+4131minor)pagefaults 0swaps
