@@ -1,0 +1,66 @@
+
+ GAMV Version: 3.000
+
+  data file = sisim.out_420x600x400_8000000_header    
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out_sisim_420x600x400_8000000_cudao
+  number of lags =           20
+  lag distance =    5.00000000    
+  lag tolerance =    1.00000000    
+  number of directions =            1
+  azm, atol, bandwh =    0.00000000       90.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       90.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            1
+  tail,head,type =            1           1          10
+  indicator threshold =    9.00000000    
+
+ ERROR data file sisim.out_420x600x400_8000000_header                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             does not exist!
+0.01user 0.01system 0:00.00elapsed 850%CPU (0avgtext+0avgdata 3452maxresident)k
+8inputs+8outputs (0major+174minor)pagefaults 0swaps
+thres_factor=0.150000
+Time for the GPU copy cpu-gpu: 0.027681 s
+Inside host kernel
+num_threads=12
+Time for the CPU kernel: 3304.658688 s
+Time for the GPU copy gpu->cpu: 0.000103 s
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_DIVIDE_BY_ZERO
+
+ GAMV Version: 3.000
+
+  data file = sisim.out_420x600x400_8000000_header    
+  columns for X,Y,Z =            1           2           3
+  number of variables =            1
+  columns =            4
+  trimming limits =   -1.00000002E+21   1.00000002E+21
+  output file = gamv.out_sisim_420x600x400_8000000_cudao
+  number of lags =           20
+  lag distance =    5.00000000    
+  lag tolerance =    1.00000000    
+  number of directions =            1
+  azm, atol, bandwh =    0.00000000       90.0000000       20.0000000    
+  dip, dtol, bandwd =    0.00000000       90.0000000       20.0000000    
+  flag to standardize sills =            1
+  number of variograms =            1
+  tail,head,type =            1           1          10
+  indicator threshold =    9.00000000    
+
+ maxdat =      8000000
+ Variable number            1
+   Number   =      8000000
+   Average  =    4.53157759    
+   Variance =    2.91375518    
+
+ Variogram  1 Indicator 1/2 Variogram:  tail=Indicator  1 head=Indicator  1   
+ Parameters ok.
+ data loading total    20.3023624    
+ extract statistics total    38999.3594    
+ total    39019.6641    
+
+ GAMV Version: 3.000 Finished
+
+38935.72user 84.66system 57:53.55elapsed 1123%CPU (0avgtext+0avgdata 243672maxresident)k
+0inputs+16outputs (0major+4778minor)pagefaults 0swaps
