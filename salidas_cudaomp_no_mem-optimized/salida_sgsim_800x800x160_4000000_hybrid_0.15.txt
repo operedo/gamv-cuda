@@ -1,82 +1,9 @@
-cd ../gslib-alges/gslib; make clean; make gslib.a COMPILER="gfortran" FLAGS="-cpp -O3 " OMP=" "; cd -
-make[1]: Entering directory '/home/sshuser/dev/gslib-alges/gslib'
-rm gslib.a acorni.o backtr.o beyond.o blue.o chknam.o chktitle.o cova3.o dlocate.o dpowint.o dsortem.o gauinv.o gcum.o getindx.o getz.o green.o hexa.o ksol.o ktsol.o locate.o nscore.o numtext.o ordrel.o picksupr.o powint.o psfill.o psline.o pstext.o rand.o red.o resc.o scal.o setrot.o setsupr.o sortem.o sqdist.o srchsupr.o strlen.o 
-make[1]: Leaving directory '/home/sshuser/dev/gslib-alges/gslib'
-make[1]: Entering directory '/home/sshuser/dev/gslib-alges/gslib'
-gfortran -cpp -O3   -c acorni.for
-gfortran -cpp -O3   -c backtr.for
-gfortran -cpp -O3   -c beyond.for
-gfortran -cpp -O3   -c blue.for
-gfortran -cpp -O3   -c chknam.for
-gfortran -cpp -O3   -c chktitle.for
-gfortran -cpp -O3   -c cova3.for
-gfortran -cpp -O3   -c dlocate.for
-gfortran -cpp -O3   -c dpowint.for
-gfortran -cpp -O3   -c dsortem.for
-gfortran -cpp -O3   -c gauinv.for
-gfortran -cpp -O3   -c gcum.for
-gfortran -cpp -O3   -c getindx.for
-gfortran -cpp -O3   -c getz.for
-gfortran -cpp -O3   -c green.for
-gfortran -cpp -O3   -c hexa.for
-gfortran -cpp -O3   -c ksol.for
-gfortran -cpp -O3   -c ktsol.for
-gfortran -cpp -O3   -c locate.for
-gfortran -cpp -O3   -c nscore.for
-gfortran -cpp -O3   -c numtext.for
-gfortran -cpp -O3   -c ordrel.for
-gfortran -cpp -O3   -c picksupr.for
-gfortran -cpp -O3   -c powint.for
-gfortran -cpp -O3   -c psfill.for
-gfortran -cpp -O3   -c psline.for
-gfortran -cpp -O3   -c pstext.for
-gfortran -cpp -O3   -c rand.for
-gfortran -cpp -O3   -c red.for
-gfortran -cpp -O3   -c resc.for
-gfortran -cpp -O3   -c scal.for
-gfortran -cpp -O3   -c setrot.for
-gfortran -cpp -O3   -c setsupr.for
-gfortran -cpp -O3   -c sortem.for
-gfortran -cpp -O3   -c sqdist.for
-gfortran -cpp -O3   -c srchsupr.for
-gfortran -cpp -O3   -c strlen.for
-ar rcs gslib.a acorni.o backtr.o beyond.o blue.o chknam.o chktitle.o cova3.o dlocate.o dpowint.o dsortem.o gauinv.o gcum.o getindx.o getz.o green.o hexa.o ksol.o ktsol.o locate.o nscore.o numtext.o ordrel.o picksupr.o powint.o psfill.o psline.o pstext.o rand.o red.o resc.o scal.o setrot.o setsupr.o sortem.o sqdist.o srchsupr.o strlen.o 
-make[1]: Leaving directory '/home/sshuser/dev/gslib-alges/gslib'
-/home/sshuser/dev/gamv-cuda
-gfortran -DFORTRAN -c -cpp -O3  gamv.for
-gfortran -c -cpp -O3  extractStatisticsFortran.for
-gfortran -DFORTRAN -cpp -O3  -I.  gamv.o extractStatisticsFortran.o -o gamvSeqFor.exe ../gslib-alges/gslib/gslib.a  -lstdc++ -lm 
-gfortran -DANSIC -c -cpp -O3  gamv.for
-gcc -c -O3  extractStatisticsCwrapper.c
-gfortran -DANSIC -cpp -O3  -I.  gamv.o extractStatisticsCwrapper.o  -o gamvSeqC.exe ../gslib-alges/gslib/gslib.a  -lstdc++ -lm 
-gfortran -DCUDA -c -cpp -O3  gamv.for
-/usr/local/cuda-10.0/bin/nvcc  -Xcompiler "-O3 -march=native -ftree-vectorize" -O3 -m64 -c -arch=sm_35 --use_fast_math -DTHRES=0.15  extractStatisticsCUDAwrapper.cu
-gfortran -DCUDA -cpp -O3  -I.  -I/usr/local/cuda-10.0/include gamv.o extractStatisticsCUDAwrapper.o   -o gamvCUDA.exe ../gslib-alges/gslib/gslib.a  -L/usr/local/cuda-10.0/lib64 -lcuda -lcudart  -lstdc++ -lm 
-gfortran -DCUDAOMP -c -cpp -O3  -fopenmp gamv.for
-/usr/local/cuda-10.0/bin/nvcc  -Xcompiler "-O3 -march=native -ftree-vectorize" -O3 -m64 -c -arch=sm_35 --use_fast_math -DTHRES=0.15  -Xcompiler -fopenmp extractStatisticsCUDAOMPwrapper.cu
-extractStatisticsCUDAOMPwrapper.cu(348): warning: variable "ilag" was declared but never referenced
-
-extractStatisticsCUDAOMPwrapper.cu(298): warning: variable "jj" was declared but never referenced
-
-extractStatisticsCUDAOMPwrapper.cu(299): warning: variable "ilag" was declared but never referenced
-
-extractStatisticsCUDAOMPwrapper.cu(303): warning: variable "index" was set but never used
-
-extractStatisticsCUDAOMPwrapper.cu(1526): warning: variable "thresTHREADSYhalf" was declared but never referenced
-
-extractStatisticsCUDAOMPwrapper.cu(1527): warning: variable "thresTHREADSXhalf" was declared but never referenced
-
-extractStatisticsCUDAOMPwrapper.cu(1497): warning: variable "half_nd" was declared but never referenced
-
-extractStatisticsCUDAOMPwrapper.cu(1498): warning: variable "j" was declared but never referenced
-
-gfortran -DCUDAOMP -cpp -O3  -I.  -I/usr/local/cuda-10.0/include gamv.o extractStatisticsCUDAOMPwrapper.o   -o gamvCUDAOMP.exe ../gslib-alges/gslib/gslib.a  -lgomp  -L/usr/local/cuda-10.0/lib64 -lcuda -lcudart  -lstdc++ -lm 
 thres_factor=0.150000
-Time for the GPU copy cpu-gpu: 0.011708 s
+Time for the GPU copy cpu-gpu: 0.011786 s
 Inside host kernel
 num_threads=12
-Time for the CPU kernel: 2228.819968 s
-Time for the GPU copy gpu->cpu: 0.000086 s
+Time for the CPU kernel: 2234.713088 s
+Time for the GPU copy gpu->cpu: 0.000091 s
 Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZERO
 
  GAMV Version: 3.000
@@ -105,11 +32,11 @@ Note: The following floating-point exceptions are signalling: IEEE_DIVIDE_BY_ZER
 
  Variogram  1 Semivariogram          :  tail=Var          head=Var            
  Parameters ok.
- data loading total    11.1089964    
- extract statistics total    26565.5176    
- total    26576.6270    
+ data loading total    11.0984821    
+ extract statistics total    26648.7852    
+ total    26659.8848    
 
  GAMV Version: 3.000 Finished
 
-26558.99user 17.96system 37:29.46elapsed 1181%CPU (0avgtext+0avgdata 150076maxresident)k
-0inputs+16outputs (0major+4352minor)pagefaults 0swaps
+26641.36user 18.82system 37:34.90elapsed 1182%CPU (0avgtext+0avgdata 154184maxresident)k
+0inputs+16outputs (0major+4864minor)pagefaults 0swaps
